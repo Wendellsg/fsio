@@ -1,11 +1,9 @@
-import { AppointmentForm } from "@/components/organisms/appointmentForm";
+import { AppointmentForm } from "@/components/forms/appointment-form";
 import Calendar from "@/components/organisms/calendar";
 import { DailySchedule } from "@/components/organisms/dailySchedule";
 import { Button } from "@/components/ui/button";
 import { DateProvider } from "@/contexts/date-context";
-import { getSession } from "@/lib/auth.guard";
 import { AppointmentGetPayload } from "@/types";
-import { UserRoleEnum } from "@prisma/client";
 import { startOfToday } from "date-fns";
 
 export default async function SchedulePage({
@@ -13,8 +11,6 @@ export default async function SchedulePage({
 }: {
   searchParams: { [key: string]: string | undefined };
 }) {
-  const session = getSession();
-
   const today = startOfToday();
   const searchDate = searchParams.date?.replace(/-/g, "/");
   const parsedDate = searchDate ? new Date(searchDate) : today;
@@ -27,12 +23,10 @@ export default async function SchedulePage({
         {
           <div className="w-full flex flex-wrap justify-end items-center gap-4 min-h-fit">
             <div>
-              {session?.roles.includes(UserRoleEnum.professional) && (
-                <AppointmentForm
-                  appointment={{} as AppointmentGetPayload}
-                  trigger={<Button>Agendar</Button>}
-                />
-              )}
+              <AppointmentForm
+                appointment={{} as AppointmentGetPayload}
+                trigger={<Button>Agendar</Button>}
+              />
             </div>
           </div>
         }
@@ -41,8 +35,6 @@ export default async function SchedulePage({
 
           <DailySchedule selectedDay={parsedDate} />
         </div>
-
-        {/*   <Schedule /> */}
       </div>
     </DateProvider>
   );

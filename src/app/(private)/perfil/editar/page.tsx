@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 
 import Loading from "@/components/LoadingIcon";
-import { Select } from "@/components/molecules/Select";
+import { Select } from "@/components/molecules/select";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Input, InputBox, InputError } from "@/components/ui/input";
