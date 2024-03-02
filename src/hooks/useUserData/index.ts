@@ -2,7 +2,7 @@
 import { toast } from "react-toastify";
 import { fisioFetcher } from "../Apis";
 
-import { UserUpdateData } from "@/utils/zod-schemas";
+import { UserUpdateData } from "@/lib/zod-schemas";
 import { User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 

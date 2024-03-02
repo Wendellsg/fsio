@@ -4,7 +4,6 @@ import { cn } from "@/lib/utils";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   register?: (name: string) => any;
 }
 

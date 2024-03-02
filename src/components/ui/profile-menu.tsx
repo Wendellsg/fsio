@@ -1,5 +1,6 @@
-import { getSession } from "@/lib/auth.guard";
-import prisma from "@/lib/prisma";
+"use client";
+
+import { useUserData } from "@/hooks/useUserData";
 import { UserRoleEnum } from "@prisma/client";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
@@ -13,21 +14,8 @@ import {
 } from "./dropdown-menu";
 import { Skeleton } from "./skeleton";
 
-async function getProfileData() {
-  const session = getSession();
-  return await prisma.user.findFirst({
-    where: { id: session?.id },
-  });
-}
-
 export async function ProfileMenu() {
-  const session = getSession();
-  const userData = await getProfileData();
-  const profileRoute = session?.roles.includes(UserRoleEnum.professional)
-    ? "/perfil"
-    : "/meu-perfil";
-
-  if (!userData) return null;
+  const { userData } = useUserData();
 
   return (
     <DropdownMenu>
@@ -44,7 +32,7 @@ export async function ProfileMenu() {
         <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Link href={profileRoute} className="w-full h-full">
+          <Link href={"/perfil"} className="w-full h-full">
             Perfil
           </Link>
         </DropdownMenuItem>

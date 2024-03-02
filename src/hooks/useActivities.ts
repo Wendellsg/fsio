@@ -1,8 +1,15 @@
+import { Activity } from "@prisma/client";
 import { toast } from "react-toastify";
 import { fisioFetcher } from "./Apis";
 
 export const useActivities = () => {
-  const createActivity = async (activity: Partial<Activity>) => {
+  const createActivity = async (
+    activity: Partial<
+      Activity & {
+        routine: { id: string };
+      }
+    >
+  ) => {
     return await fisioFetcher({
       url: `/users/routines/${activity.routine?.id}/activities`,
       method: "POST",
@@ -13,7 +20,11 @@ export const useActivities = () => {
     });
   };
 
-  const deleteActivity = async (activity: Activity) => {
+  const deleteActivity = async (
+    activity: Activity & {
+      routine: { id: string };
+    }
+  ) => {
     return await fisioFetcher({
       url: `/users/routines/${activity.routine.id}/activities/${activity.id}`,
       method: "DELETE",

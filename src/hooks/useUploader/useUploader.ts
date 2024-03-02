@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosProgressEvent } from "axios";
 import { toast } from "react-toastify";
 import { fisioApi } from "../Apis";
 
@@ -37,9 +37,9 @@ export const useUploader = () => {
     }
 
     const options = {
-      onUploadProgress: (progressEvent) => {
+      onUploadProgress: (progressEvent: AxiosProgressEvent) => {
         const { loaded, total } = progressEvent;
-        const percent = Math.floor((loaded * 100) / total);
+        const percent = Math.floor((loaded * 100) / (total || 1));
 
         toast.update(toastId, {
           render: `Enviando arquivo... ${percent}%`,

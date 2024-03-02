@@ -24,7 +24,13 @@ export const useAuth = () => {
     resolver: zodResolver(createLoginSchema),
   });
 
-  const login = async ({ email, password }) => {
+  const login = async ({
+    email,
+    password,
+  }: {
+    email: string;
+    password: string;
+  }) => {
     setIsLogging(true);
     try {
       await axios.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`, {
@@ -33,7 +39,7 @@ export const useAuth = () => {
       });
 
       window.location.reload();
-    } catch (error) {
+    } catch (error: any) {
       toast.error(error.response.data.message);
     } finally {
       setIsLogging(false);
