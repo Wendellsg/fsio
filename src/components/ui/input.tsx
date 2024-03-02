@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
-  register?: (name: string) => any;
+  register?: any;
 }
 
 const Input: React.FC<InputProps> = ({

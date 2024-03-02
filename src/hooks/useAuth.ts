@@ -33,12 +33,20 @@ export const useAuth = () => {
   }) => {
     setIsLogging(true);
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`, {
-        email,
-        password,
-      });
+      const { data } = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`,
+        {
+          email,
+          password,
+        }
+      );
 
-      window.location.reload();
+      window.localStorage.setItem(
+        process.env.NEXT_PUBLIC_TOKEN_KEY as string,
+        data.token
+      );
+
+      console.log(data);
     } catch (error: any) {
       toast.error(error.response.data.message);
     } finally {

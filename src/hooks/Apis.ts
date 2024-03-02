@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 
 import { toast } from "react-toastify";
 
@@ -32,10 +32,15 @@ export const fisioFetcher = async ({
       url,
       method,
       data,
+      headers: {
+        Authorization: `Bearer ${window.localStorage.getItem(
+          process.env.NEXT_PUBLIC_TOKEN_KEY as string
+        )}`,
+      },
     });
     callback && callback(response.data);
     return response.data;
-  } catch (error: any) {
+  } catch (error: AxiosError | any) {
     if (!error.response) {
       toast.error("Erro ao se conectar com o servidor");
       return;
