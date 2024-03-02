@@ -1,6 +1,6 @@
 import { useDate } from "@/contexts/date-context";
 import { AppointmentGetPayload } from "@/types";
-import { Appointment, AppointmentComment } from "@prisma/client";
+import { AppointmentComment, Prisma } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
@@ -29,7 +29,9 @@ export const useAppointments = () => {
     });
   };
 
-  const createAppointment = async (data: Partial<Appointment>) => {
+  const createAppointment = async (
+    data: Prisma.AppointmentUncheckedCreateInput
+  ) => {
     await fisioFetcher({
       url: `/appointments`,
       method: "POST",
@@ -41,7 +43,10 @@ export const useAppointments = () => {
     });
   };
 
-  const updateAppointment = async (id: string, data: Partial<Appointment>) => {
+  const updateAppointment = async (
+    id: string,
+    data: Prisma.AppointmentUncheckedUpdateInput
+  ) => {
     await fisioFetcher({
       url: `/appointments/${id}`,
       method: "PATCH",
@@ -88,7 +93,7 @@ export function useAppointmentComments(appointmentId: string) {
     });
   };
 
-  const createComment = async (data: Partial<AppointmentComment>) => {
+  const createComment = async (data: Prisma.AppointmentCommentCreateInput) => {
     await fisioFetcher({
       url: `/appointments/${appointmentId}/comments`,
       method: "POST",

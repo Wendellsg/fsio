@@ -1,6 +1,5 @@
 "use client";
 import { AppointmentForm } from "@/components/forms/appointment-form";
-import { useUserData } from "@/hooks/useUserData";
 import { getAppointments, getAppointmentsByHour } from "@/lib/appointments";
 import { AppointmentGetPayload } from "@/types";
 import { format, parseISO } from "date-fns";
@@ -9,8 +8,6 @@ import { AppointmentCard } from "../appointment";
 
 export const DailySchedule = ({ selectedDay }: { selectedDay: Date }) => {
   const { appointments } = useAppointments();
-
-  const { userData } = useUserData();
 
   const appointmentsOfDay = getAppointments(selectedDay, appointments || []);
 

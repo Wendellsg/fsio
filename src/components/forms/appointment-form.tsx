@@ -13,12 +13,15 @@ import {
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { toBrPhoneNumber } from "@/lib/phone";
-import { AppointmentStatusEnum, User } from "@prisma/client";
+import { AppointmentStatusEnum, Prisma, User } from "@prisma/client";
 import { format } from "date-fns";
 import { CalendarDays, Clock, Phone } from "lucide-react";
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FaTrash } from "react-icons/fa";
+import { v4 as uuidv4 } from "uuid";
+
+import { useProfessionalData } from "@/hooks/useProfessionalData";
 import {
   useAppointmentComments,
   useAppointments,
@@ -80,19 +83,23 @@ export const AppointmentForm = ({
     appointment?.status || AppointmentStatusEnum.scheduled
   );
 
+  const { professionalData } = useProfessionalData();
+
   const handleSubmit = () => {
-    const appointmentData = {
+    const appointmentData: Prisma.AppointmentUncheckedCreateInput = {
       ...appointment,
-      patientId: selectedPatient?.id,
+      patientId: selectedPatient?.id!,
       startDate: selectedDate,
       endDate: selectedEndDate,
       status: selectedStatus,
+      professionalId: professionalData?.id!,
     };
 
     if (appointment?.id) {
       console.log(appointmentData);
       updateAppointment(appointment.id, appointmentData);
     } else {
+      console.log(appointmentData);
       createAppointment(appointmentData);
     }
   };
@@ -252,8 +259,9 @@ export const AppointmentForm = ({
                   onClick={() => {
                     if (newComment) {
                       createComment({
+                        id: uuidv4(),
                         comment: newComment,
-                        appointmentId: appointment.id,
+                        Appointment: { connect: { id: appointment.id } },
                       });
                       setNewComment("");
                     }
