@@ -4,6 +4,13 @@ import { useMemo, useState } from "react";
 import { toast } from "react-toastify";
 import { fisioFetcher } from "../Apis";
 
+export type GetPatientResponseDTO = Array<{
+  id: string;
+  name: string;
+  image: string;
+  email: string;
+}>;
+
 export const searchPatient = async (email: string) => {
   const response = await fisioFetcher({
     url: `/users/search?email=${email}`,
@@ -49,14 +56,11 @@ export const removePatient = async (patientId: string) => {
   });
 };
 
-const getPatients = async (): Promise<User[] | null> => {
-  const response = await fisioFetcher({
+const getPatients = async (): Promise<GetPatientResponseDTO> => {
+  return await fisioFetcher({
     url: `/patients`,
     method: "GET",
   });
-
-  if (!response) return null;
-  return response;
 };
 
 export const updatePatient = async (
@@ -90,9 +94,12 @@ export const usePatients = () => {
   const [searchInput, setSearchInput] = useState("");
 
   const filteredPatients = useMemo(() => {
-    return patients?.filter((patient) => {
-      return patient?.name?.toLowerCase().includes(searchInput.toLowerCase());
-    });
+    if (!patients) return [];
+    if (!searchInput) return patients;
+
+    return patients.filter((patient) =>
+      patient.name.toLowerCase().includes(searchInput.toLowerCase())
+    );
   }, [patients, searchInput]);
 
   return {
@@ -101,7 +108,7 @@ export const usePatients = () => {
     isLoading,
     setSearchInput,
     searchInput,
-    patients,
+    patients: patients || ([] as GetPatientResponseDTO),
   };
 };
 

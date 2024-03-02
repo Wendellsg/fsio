@@ -1,15 +1,9 @@
-import HomeDashboardBadges from "@/components/organisms/HomeDashboardBadges";
-import {
-  AppointmentsSkeleton,
-  DashBoardAppointments,
-} from "@/components/organisms/dashboardAppointments";
-import {
-  DashboardPatients,
-  DashboardPatientsSkeleton,
-} from "@/components/organisms/dashboardPatients";
+import { HomeDashboardBadges } from "@/components/organisms/HomeDashboardBadges";
+import { DashBoardAppointments } from "@/components/organisms/dashboardAppointments";
+import { DashboardPatients } from "@/components/organisms/dashboardPatients";
 import { Greeter } from "@/components/ui/greeter";
-import { ProfileMenu, ProfileMenuSkeleton } from "@/components/ui/profile-menu";
-import { Suspense } from "react";
+import { ProfileMenu } from "@/components/ui/profile-menu";
+import { DateProvider } from "@/contexts/date-context";
 
 export default function HomePage() {
   return (
@@ -18,35 +12,27 @@ export default function HomePage() {
         <div className="flex w-full items-start justify-between p-4 md:p-0">
           <Greeter />
 
-          <Suspense fallback={<ProfileMenuSkeleton />}>
-            {/* @ts-expect-error Async Server Component */}
-            <ProfileMenu />
-          </Suspense>
+          <ProfileMenu />
         </div>
 
-        <Suspense fallback={""}>
-          {/* @ts-expect-error Async Server Component */}
-          <HomeDashboardBadges />
-        </Suspense>
+        <HomeDashboardBadges />
 
         <div className="mt-8">
           <h2 className="max-w-fit ml-4 bg-accent p-2 rounded-xl font-bold">
             Últimos Pacientes
           </h2>
-          <Suspense fallback={<DashboardPatientsSkeleton />}>
-            {/* @ts-expect-error Async Server Component */}
-            <DashboardPatients />
-          </Suspense>
+
+          <DashboardPatients />
         </div>
 
         <div className="flex flex-col gap-4 max-w-full">
           <h2 className="max-w-fit ml-4 bg-accent p-2 rounded-xl font-bold">
             Próximas consultas
           </h2>
-          <Suspense fallback={<AppointmentsSkeleton />}>
-            {/* @ts-expect-error Async Server Component */}
+
+          <DateProvider date={new Date()}>
             <DashBoardAppointments />
-          </Suspense>
+          </DateProvider>
         </div>
       </div>
     </div>

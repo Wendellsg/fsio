@@ -1,9 +1,5 @@
-import NavMenu, { MenuItem } from "@/components/Nav";
-import { AppContainer, PageContent } from "@/components/atoms/layouts";
-import { getSession } from "@/lib/auth.guard";
-import { UserRoleEnum } from "@prisma/client";
-
-import { redirect } from "next/navigation";
+import NavMenu, { MenuItem } from "@/components/organisms/navigation";
+import { AppContainer, PageContent } from "@/components/ui/layouts";
 import {
   FaCalendarCheck,
   FaDumbbell,
@@ -16,12 +12,6 @@ export default function ProfessionalLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = getSession();
-
-  if (!session?.roles.includes(UserRoleEnum.professional)) {
-    redirect("/home");
-  }
-
   const menuItems: MenuItem[] = [
     {
       label: "Dashboard",

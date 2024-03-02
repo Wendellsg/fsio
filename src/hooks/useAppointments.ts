@@ -1,6 +1,6 @@
 import { useDate } from "@/contexts/date-context";
 import { AppointmentGetPayload } from "@/types";
-import { Appointment, AppointmentComment, UserRoleEnum } from "@prisma/client";
+import { Appointment, AppointmentComment } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
 import { toast } from "react-toastify";
@@ -10,10 +10,6 @@ import { useUserData } from "./useUserData";
 export const useAppointments = () => {
   const { userData } = useUserData();
   const { date } = useDate();
-
-  const endPoint = userData?.roles?.includes(UserRoleEnum.professional)
-    ? `/appointments/professional`
-    : `/appointments/patient`;
 
   const {
     data: appointments,
@@ -28,7 +24,7 @@ export const useAppointments = () => {
 
   const getAppointment = async (): Promise<AppointmentGetPayload[]> => {
     return await fisioFetcher({
-      url: endPoint + `?date=${format(date, "yyyy-MM-dd")}`,
+      url: "/appointments/professional" + `?date=${format(date, "yyyy-MM-dd")}`,
       method: "GET",
     });
   };
@@ -69,7 +65,7 @@ export const useAppointments = () => {
   };
 
   return {
-    appointments: appointments || ([] as AppointmentGetPayload[]),
+    appointments: appointments,
     isLoading,
     refetch,
     createAppointment,

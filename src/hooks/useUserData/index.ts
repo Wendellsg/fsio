@@ -12,29 +12,15 @@ export const useUserData = () => {
     isLoading,
     refetch,
   } = useQuery({
-    queryFn: async (): Promise<User | null> => {
+    queryFn: async (): Promise<Partial<User>> => {
       return await fisioFetcher({
         url: "/auth/me",
         method: "GET",
       });
     },
-    queryKey: ["useData"],
+    queryKey: ["userData"],
     staleTime: 1000 * 60 * 10,
   });
-
-  const updateUserProfileImage = async (url: string) => {
-    await fisioFetcher({
-      url: "/users/image",
-      method: "PATCH",
-      data: {
-        profileImage: url,
-      },
-      callback: () => {
-        refetch();
-        toast.success("Imagem atualizada com sucesso");
-      },
-    });
-  };
 
   const updateUserProfileData = async (data: UserUpdateData) => {
     await fisioFetcher({
@@ -78,7 +64,6 @@ export const useUserData = () => {
     userData,
     isLoading,
     refetch,
-    updateUserProfileImage,
     updateUserProfileData,
     addFavoriteExercise,
     removeFavoriteExercise,

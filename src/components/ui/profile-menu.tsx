@@ -14,7 +14,7 @@ import {
 } from "./dropdown-menu";
 import { Skeleton } from "./skeleton";
 
-export async function ProfileMenu() {
+export function ProfileMenu() {
   const { userData } = useUserData();
 
   return (
@@ -36,7 +36,7 @@ export async function ProfileMenu() {
             Perfil
           </Link>
         </DropdownMenuItem>
-        {userData?.roles.includes(UserRoleEnum.professional) && (
+        {userData?.roles?.includes(UserRoleEnum.professional) && (
           <DropdownMenuItem>
             <Link href={"/assinatura"} className="w-full h-full">
               Assinatura
