@@ -13,7 +13,7 @@ export type GetPatientResponseDTO = Array<{
 
 export const searchPatient = async (email: string) => {
   const response = await fisioFetcher({
-    url: `/users/search?email=${email}`,
+    url: `/users/by-email?email=${email}`,
     method: "GET",
     onError: (error) => {
       toast.warning(error);
@@ -26,7 +26,7 @@ export const searchPatient = async (email: string) => {
 
 export const addPatient = async (patientId: string) => {
   return await fisioFetcher({
-    url: `/patients/requests`,
+    url: `/requests`,
     method: "POST",
     data: { patientId },
     callback: () => {
@@ -35,7 +35,10 @@ export const addPatient = async (patientId: string) => {
   });
 };
 
-export const createPatient = async (patient: Partial<User>) => {
+export const createPatient = async (patient: {
+  name: string;
+  email: string;
+}) => {
   return await fisioFetcher({
     url: `/patients`,
     method: "POST",

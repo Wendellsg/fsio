@@ -35,7 +35,7 @@ export function SignUpForm() {
     }
 
     try {
-      await axios.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/signup`, {
+      await axios.post(`${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/sign-up`, {
         name: signUpData.name,
         email: signUpData.email,
         password: signUpData.password,

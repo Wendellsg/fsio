@@ -4,19 +4,19 @@ import { fisioFetcher } from "./Apis";
 
 export function getProfessionalRequests(): Promise<RequestWithUser[]> {
   return fisioFetcher({
-    url: "/patients/requests",
+    url: "/requests/professional",
     method: "GET",
   });
 }
 
 export function deleteProfessionalRequest(requestId: string) {
   return fisioFetcher({
-    url: `/patients/requests/${requestId}`,
+    url: `/requests/${requestId}`,
     method: "DELETE",
   });
 }
 
-export function useProfessionalRequests(initialData: RequestWithUser[] = []) {
+export function useProfessionalRequests() {
   const {
     data: requests,
     error,
@@ -25,7 +25,6 @@ export function useProfessionalRequests(initialData: RequestWithUser[] = []) {
   } = useQuery({
     queryKey: ["professionalRequests"],
     queryFn: getProfessionalRequests,
-    initialData,
   });
 
   return {

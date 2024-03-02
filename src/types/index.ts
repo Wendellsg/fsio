@@ -1,6 +1,7 @@
 import {
   Appointment,
   AppointmentStatusEnum,
+  Request,
   RequestStatusEnum,
   RoutineFrequencyTypeEnum,
   RoutinePeriodEnum,

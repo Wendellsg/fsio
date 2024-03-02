@@ -12,8 +12,6 @@ export function LoginForm() {
 
   const { userData } = useUserData();
 
-  console.log(userData);
-
   return (
     <form
       onSubmit={handleSubmit}
