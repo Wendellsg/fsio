@@ -1,5 +1,5 @@
 "use client";
-import { Modals } from "@/components/molecules/modals";
+/* import { Modals } from "@/components/molecules/modals";
 import { EvolutionForm } from "@/components/organisms/EvolutionForm";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -9,7 +9,7 @@ import { Evolution } from "@/types";
 import { format } from "date-fns";
 import { utcToZonedTime } from "date-fns-tz";
 import { useState } from "react";
-import { MdAddCircleOutline, MdDelete } from "react-icons/md";
+import { MdAddCircleOutline, MdDelete } from "react-icons/md"; */
 
 export default function EvolutionsPage({
   params,
@@ -18,6 +18,7 @@ export default function EvolutionsPage({
     id: string;
   };
 }) {
+  /*
   const [selectedEvolution, setSelectedEvolution] = useState<Evolution | null>(
     null
   );
@@ -31,11 +32,12 @@ export default function EvolutionsPage({
 
   const patientEvolutions = evolutions?.filter(
     (evolution) => evolution.user.id === id
-  );
+  ); */
 
   return (
     <div className="flex flex-col items-start justify-start w-full h-full gap-4 p-4">
-      <Modals
+      AAA
+      {/*    <Modals
         isOpen={!!selectedEvolution}
         onClose={() => setSelectedEvolution(null)}
         title={
@@ -143,7 +145,7 @@ export default function EvolutionsPage({
         })}
       </div>
 
-      <div />
+      <div /> */}
     </div>
   );
 }

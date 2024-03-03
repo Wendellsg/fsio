@@ -1,7 +1,5 @@
 import { PatientList } from "@/components/organisms/patients";
 import { ProfessionalRequests } from "@/components/organisms/requests";
-/* import { ProfessionalRequests } from "@/components/organisms/requests";
-import { RequestService } from "@/services/request.service"; */
 
 export default function PatientsPage() {
   return (
@@ -24,13 +22,3 @@ export default function PatientsPage() {
     </div>
   );
 }
-/* 
-async function Requests() {
-  const usersService = new RequestService();
-
-  const requests = await usersService.getProfessionalRequests();
-
-  if (requests instanceof Response) return null;
-  return <ProfessionalRequests initialRequests={requests || []} />;
-}
- */

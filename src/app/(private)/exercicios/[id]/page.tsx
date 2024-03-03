@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 import { ExerciciesForm } from "@/components/ExerciciesForm";
 import Loading from "@/components/LoadingIcon";
 import { VideoPlayer } from "@/components/VideoPlayer";
@@ -8,10 +8,10 @@ import { useExercise, useExercises } from "@/hooks";
 import { useUserData } from "@/hooks/useUserData";
 import { Role } from "@/types";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState } from "react"; */
 
 export default function PacientePage({ params }: { params: { id: string } }) {
-  const router = useRouter();
+  /*  const router = useRouter();
   const { id } = params;
   const goBack = () => router.push("/exercicios");
   const [showEditModal, setShowEditModal] = useState<boolean>(false);
@@ -26,10 +26,10 @@ export default function PacientePage({ params }: { params: { id: string } }) {
         <Loading />
       </div>
     );
-
+ */
   return (
     <div className="flex flex-col lg:flex-row items-start justify-start w-full h-full gap-4 lg:p-4">
-      <Modals
+      {/*    <Modals
         isOpen={showEditModal}
         onClose={() => setShowEditModal(false)}
         title="Editar exercício"
@@ -77,7 +77,7 @@ export default function PacientePage({ params }: { params: { id: string } }) {
           <p className="font-bold text-lg">Instruções</p>
           <p>{exercise?.description}</p>
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }

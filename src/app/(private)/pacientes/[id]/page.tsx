@@ -1,4 +1,4 @@
-"use client";
+/* "use client";
 
 import RoutineCard from "@/components/RoutineCard";
 import { RoutineForm } from "@/components/RoutineForm";
@@ -23,7 +23,7 @@ import { FaEnvelope, FaRulerVertical, FaWeight } from "react-icons/fa";
 import { HiCake } from "react-icons/hi";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { RiEditBoxFill, RiMapPin2Fill } from "react-icons/ri";
-import { toast } from "react-toastify";
+import { toast } from "react-toastify"; */
 
 export default function PacientePage({
   params,
@@ -33,16 +33,16 @@ export default function PacientePage({
   };
 }) {
   const { id } = params;
-
+  /* 
   const { patientData, refetch } = usePatient(id as string);
   const { removePatient } = usePatients();
 
   const [newRoutineModalOpen, setNewRoutineModalOpen] =
     useState<boolean>(false);
-
+ */
   return (
     <>
-      <Modals
+      {/*   <Modals
         isOpen={newRoutineModalOpen}
         onClose={() => setNewRoutineModalOpen(false)}
         title="Nova Rotina"
@@ -186,7 +186,7 @@ export default function PacientePage({
             </Button>
           </div>
         </div>
-      </div>
+      </div> */}
     </>
   );
 }
