@@ -94,6 +94,19 @@ export function translateRequestStatus(status: RequestStatusEnum) {
   }
 }
 
+export function translateUserRole(role: UserRoleEnum) {
+  switch (role) {
+    case UserRoleEnum.admin:
+      return "Administrador";
+    case UserRoleEnum.professional:
+      return "Profissional";
+    case UserRoleEnum.patient:
+      return "Paciente";
+    default:
+      return "";
+  }
+}
+
 export type Session = {
   id: string;
   name: string;

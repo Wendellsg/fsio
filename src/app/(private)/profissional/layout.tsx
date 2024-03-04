@@ -16,23 +16,23 @@ export default function ProfessionalLayout({
     {
       label: "Dashboard",
       icon: <FaHouse />,
-      href: "/dashboard",
+      href: "/profissional",
     },
     {
-      href: "/agenda",
+      href: "/profissional/agenda",
       icon: <FaCalendarCheck />,
       label: "Agenda",
     },
     {
       label: "Pacientes",
       icon: <FaUserGroup />,
-      href: "/pacientes",
+      href: "/profissional/pacientes",
     },
     {
       label: "Exercícios",
       icon: <FaDumbbell />,
 
-      href: "/exercicios",
+      href: "/profissional/exercicios",
     },
   ];
 

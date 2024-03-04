@@ -1,4 +1,5 @@
 "use client";
+import { AlreadyLoggedCard } from "@/components/molecules/already-logger";
 import { Button } from "@/components/ui/button";
 import { Input, InputBox, InputError } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -10,7 +11,13 @@ import Link from "next/link";
 export function LoginForm() {
   const { register, handleSubmit, loginErrors, isLogging } = useAuth();
 
-  const { userData } = useUserData();
+  const { userData, isLoading } = useUserData();
+
+  if (isLoading) return <Loading size={50} />;
+
+  if (userData) {
+    return <AlreadyLoggedCard />;
+  }
 
   return (
     <form

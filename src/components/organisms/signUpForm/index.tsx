@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input, InputBox, InputError } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loading } from "@/components/ui/loading";
+import { Switch } from "@/components/ui/switch";
 import { SignUpData, signUpDataSchema } from "@/lib/zod-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -16,6 +17,8 @@ export function SignUpForm() {
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<SignUpData>({
     resolver: zodResolver(signUpDataSchema),
@@ -39,6 +42,7 @@ export function SignUpForm() {
         name: signUpData.name,
         email: signUpData.email,
         password: signUpData.password,
+        isProfessional: signUpData.isProfessional,
       });
       toast.success("Cadastro realizado com sucesso!");
       router.push("/login");
@@ -116,6 +120,23 @@ export function SignUpForm() {
           name="passwordConfirmation"
           register={register}
           id="password-confirmation"
+        />
+
+        {errors?.passwordConfirmation?.message && (
+          <InputError>{errors?.passwordConfirmation?.message}</InputError>
+        )}
+      </InputBox>
+
+      <InputBox>
+        <Label htmlFor="isProfessional">Você é profissional da saúde?</Label>
+
+        <Switch
+          name="isProfessional"
+          checked={watch("isProfessional")}
+          id="isProfessional"
+          onCheckedChange={(value) => {
+            setValue("isProfessional", value as boolean);
+          }}
         />
 
         {errors?.passwordConfirmation?.message && (

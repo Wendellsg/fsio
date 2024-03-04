@@ -93,13 +93,16 @@ model ExercisesOnUser {
 }
 
 model FileUploaded {
-  id        String   @id
-  createdAt DateTime @default(now())
+  id        String        @id
+  createdAt DateTime      @default(now())
   updatedAt DateTime
   name      String
-  url       String
-  type      String
-  User      User[]   @relation("FileUploadedToUser")
+  key       String
+  type      FileTypeEnum
+  size      Int
+  extension ExtensionEnum
+  userId    String
+  User      User[]        @relation("FileUploadedToUser")
 }
 
 model Professional {
@@ -169,6 +172,8 @@ model User {
   height                                 Int?
   weight                                 Int?
   birthDate                              DateTime?
+  accountVerifiedAt                      DateTime?
+  accountVerifyToken                     String?
   Address                                Address?
   Appointment                            Appointment[]
   Evolution                              Evolution[]
@@ -178,6 +183,13 @@ model User {
   Routine                                Routine[]
   FileUploaded                           FileUploaded[]    @relation("FileUploadedToUser")
   Professional_ProfessionalsToPatients   Professional[]    @relation("ProfessionalsToPatients")
+}
+
+model Lead {
+  id        String   @id
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime
 }
 
 enum AppointmentStatusEnum {
@@ -218,4 +230,31 @@ enum UserRoleEnum {
   patient
   professional
   admin
+}
+
+enum ExtensionEnum {
+  jpg
+  jpeg
+  png
+  gif
+  mp4
+  pdf
+  doc
+  docx
+  xls
+  xlsx
+  ppt
+  pptx
+  txt
+  csv
+  zip
+  rar
+  tar
+  gz
+}
+
+enum FileTypeEnum {
+  image
+  video
+  document
 }

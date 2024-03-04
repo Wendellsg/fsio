@@ -52,7 +52,9 @@ export const useAuth = () => {
 
       toast.success("Login efetuado com sucesso");
 
-      router.push("/dashboard");
+      queryClient.invalidateQueries({
+        queryKey: ["userData"],
+      });
     } catch (error: any) {
       toast.error(error.response.data.message);
     } finally {

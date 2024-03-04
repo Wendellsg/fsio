@@ -79,6 +79,8 @@ export const signUpDataSchema = z.object({
   passwordConfirmation: z.string({
     required_error: "Campo obrigatório",
   }),
+
+  isProfessional: z.boolean(),
 });
 
 export type SignUpData = z.infer<typeof signUpDataSchema>;
