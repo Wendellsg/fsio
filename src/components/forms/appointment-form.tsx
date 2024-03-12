@@ -1,5 +1,4 @@
 "use client";
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -12,16 +11,15 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { toBrPhoneNumber } from "@/lib/phone";
 import { AppointmentStatusEnum, Prisma, User } from "@prisma/client";
-import { format } from "date-fns";
-import { CalendarDays, Clock, Phone } from "lucide-react";
-import Link from "next/link";
 import { useMemo, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
 
 import { useProfessionalData } from "@/hooks/useProfessionalData";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import {
   useAppointmentComments,
   useAppointments,
@@ -30,7 +28,8 @@ import { usePatients } from "../../hooks/usePatients";
 import { AppointmentGetPayload, translateAppointmentStatus } from "../../types";
 import { PacienteAvatar } from "../molecules/patient-avatar";
 import { Select } from "../molecules/select";
-import { AppointmentBadge } from "../organisms/appointment";
+import { Calendar } from "../ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { SearchInput } from "../ui/search-input";
 type AppointmentFormProps = {
   appointment: AppointmentGetPayload;
@@ -69,14 +68,16 @@ export const AppointmentForm = ({
     appointment?.patient as Partial<User>
   );
 
-  const [selectedDate, setSelectedDate] = useState(
-    appointment?.startDate ||
-      new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
+  const [selectedDate, setSelectedDate] = useState<Date>(
+    appointment?.startDate || new Date()
   );
 
-  const [selectedEndDate, setSelectedEndDate] = useState(
-    appointment?.endDate ||
-      new Date(new Date().getTime() - new Date().getTimezoneOffset() * 60000)
+  const [startDateTime, setStartDateTime] = useState<string>(
+    appointment?.startDateTime
+  );
+
+  const [endDateTime, setEndDateTime] = useState<string>(
+    appointment?.endDateTime
   );
 
   const [selectedStatus, setSelectedStatus] = useState<AppointmentStatusEnum>(
@@ -90,9 +91,11 @@ export const AppointmentForm = ({
       ...appointment,
       patientId: selectedPatient?.id!,
       startDate: selectedDate,
-      endDate: selectedEndDate,
+      startDateTime,
+      endDateTime,
       status: selectedStatus,
       professionalId: professionalData?.id!,
+      timeZone: new Date().getTimezoneOffset() / 60,
     };
 
     if (appointment?.id) {
@@ -164,13 +167,35 @@ export const AppointmentForm = ({
 
           {selectedPatient && (
             <div className="flex flex-col gap-4">
-              <p className="font-bold">Data</p>
-              <input
-                type="date"
-                value={new Date(selectedDate).toISOString().split("T")[0]}
-                className="picker"
-                onChange={(e) => setSelectedDate(new Date(e.target.value))}
-              />
+              <Popover>
+                <PopoverTrigger asChild>
+                  <Button
+                    variant={"outline"}
+                    className={cn(
+                      "w-[280px] justify-start text-left font-normal",
+                      !selectedDate && "text-muted-foreground"
+                    )}
+                  >
+                    <CalendarIcon className="mr-2 h-4 w-4" />
+                    {selectedDate ? (
+                      format(selectedDate, "PPP")
+                    ) : (
+                      <span>Selecione uma data</span>
+                    )}
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-auto p-0">
+                  <Calendar
+                    mode="single"
+                    selected={selectedDate}
+                    onSelect={(date) => {
+                      if (!date) return;
+                      setSelectedDate(date);
+                    }}
+                    initialFocus
+                  />
+                </PopoverContent>
+              </Popover>
             </div>
           )}
 
@@ -181,53 +206,23 @@ export const AppointmentForm = ({
               <div className="flex items-center gap-4 flex-wrap">
                 <input
                   type="time"
-                  value={new Date(selectedDate)
-                    .toISOString()
-                    .split("T")[1]
-                    .split(".")[0]
-                    .slice(0, 5)}
+                  value={startDateTime}
                   className="picker"
-                  onChange={(e) =>
-                    setSelectedDate(
-                      new Date(
-                        new Date(
-                          `${
-                            new Date(selectedDate).toISOString().split("T")[0]
-                          }T${e.target.value}`
-                        ).getTime() -
-                          new Date().getTimezoneOffset() * 60000
-                      )
-                    )
-                  }
+                  onChange={(e) => setStartDateTime(e.target.value)}
                 />
                 <p className="text-sm whitespace-nowrap font-bold">até as</p>
 
                 <input
                   type="time"
-                  value={new Date(selectedEndDate)
-                    .toISOString()
-                    .split("T")[1]
-                    .split(".")[0]
-                    .slice(0, 5)}
+                  value={endDateTime}
                   className="picker"
-                  onChange={(e) =>
-                    setSelectedEndDate(
-                      new Date(
-                        new Date(
-                          `${
-                            new Date(selectedDate).toISOString().split("T")[0]
-                          }T${e.target.value}`
-                        ).getTime() -
-                          new Date().getTimezoneOffset() * 60000
-                      )
-                    )
-                  }
+                  onChange={(e) => setEndDateTime(e.target.value)}
                 />
               </div>
             </div>
           )}
 
-          {selectedPatient && selectedDate && selectedEndDate && (
+          {selectedPatient && selectedDate && endDateTime && (
             <div className="flex flex-col gap-4 w-full max-w-48">
               <Select
                 className="w-full max-w-48"
@@ -326,61 +321,5 @@ export const AppointmentForm = ({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-};
-
-export const AppointmentDetails = ({
-  appointment,
-}: {
-  appointment: AppointmentGetPayload;
-}) => {
-  return (
-    <div className="h-full flex flex-col px-4 gap-4 w-full">
-      <div className="flex justify-start items-center gap-4 max-w-full border-b-2 pb-4">
-        <Avatar className="w-28 h-28">
-          <AvatarImage src={appointment.professional.user.image} />
-          <AvatarFallback>
-            {appointment.professional.user.name.split(" ")[0][0]}
-            {appointment.professional.user.name.split(" ")[1][0]}
-          </AvatarFallback>
-        </Avatar>
-
-        <div className="flex flex-col gap-2">
-          <Link href={`/profissionais/${appointment.professional.id}`} passHref>
-            <p className="font-bold hover:text-sky hover:underline">
-              {appointment.professional.user.name}
-            </p>
-          </Link>
-          <p className="w-fit p-1 rounded-lg bg-primary font-bold">
-            {appointment.professional.profession}
-          </p>
-
-          <div className="w-full flex gap-2">
-            <Phone size={20} />
-            <p className="font-bold">
-              {toBrPhoneNumber(appointment.professional.phone)}
-            </p>
-          </div>
-        </div>
-      </div>
-
-      <div className="flex gap-2 items-center font-bold">
-        <CalendarDays />
-        <p>{new Date(appointment.startDate).toLocaleDateString("pt-BR")}</p>
-      </div>
-
-      <div className="flex  gap-2 items-center font-bold">
-        <Clock />
-        <span>
-          {" "}
-          {format(appointment.startDate, "HH:mm")} -
-          {format(appointment.endDate, "HH:mm")}
-        </span>
-      </div>
-
-      <AppointmentBadge status={appointment.status}>
-        {translateAppointmentStatus(appointment.status)}
-      </AppointmentBadge>
-    </div>
   );
 };

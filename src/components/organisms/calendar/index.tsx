@@ -20,7 +20,7 @@ import {
   parse,
 } from "date-fns";
 import Link, { LinkProps } from "next/link";
-import { useRouter } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 import { useAppointments } from "../../../hooks/useAppointments";
@@ -52,15 +52,16 @@ const Calendar = ({
   });
 
   const router = useRouter();
+  const pathName = usePathname();
 
   function previousMonth() {
     const firstDayNextMonth = add(firstDayCurrentMonth, { months: -1 });
-    router.push(`/agenda?date=${format(firstDayNextMonth, "yyyy-MM-dd")}`);
+    router.push(`${pathName}?date=${format(firstDayNextMonth, "yyyy-MM-dd")}`);
   }
 
   function nextMonth() {
     const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
-    router.push(`/agenda?date=${format(firstDayNextMonth, "yyyy-MM-dd")}`);
+    router.push(`${pathName}?date=${format(firstDayNextMonth, "yyyy-MM-dd")}`);
   }
 
   if (!appointments) return <p>Carregando...</p>;
@@ -119,7 +120,7 @@ const Calendar = ({
                       format(day, "yyyy-MM-dd") === format(today, "yyyy-MM-dd")
                     }
                     dateTime={format(day, "yyyy-MM-dd")}
-                    href={`/agenda?date=${format(day, "yyyy-MM-dd")}`}
+                    href={`${pathName}?date=${format(day, "yyyy-MM-dd")}`}
                   >
                     <time dateTime={format(day, "yyyy-MM-dd")}>
                       {format(day, "d")}
@@ -146,7 +147,7 @@ const Calendar = ({
                           </Meeting>
                         ))}
 
-                      {getAppointments(day, appointments).length > 1 && (
+                      {getAppointments(day, appointments).length > 2 && (
                         <Meeting
                           style={{
                             left: 24,

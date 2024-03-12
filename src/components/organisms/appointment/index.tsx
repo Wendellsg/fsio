@@ -1,7 +1,6 @@
 /* eslint-disable @next/next/no-img-element */
 import { AppointmentGetPayload, translateAppointmentStatus } from "@/types";
 import { AppointmentStatusEnum } from "@prisma/client";
-import { format } from "date-fns/format";
 import { useMemo } from "react";
 
 export const AppointmentCard = ({
@@ -37,8 +36,7 @@ export const AppointmentCard = ({
         </p>
 
         <p className="font-bold text-gray-400 text-sm">
-          {format(appointment.startDate, "HH:mm")} -
-          {format(appointment.endDate, "HH:mm")}
+          {appointment.startDateTime} -{appointment.endDateTime}
         </p>
 
         <AppointmentBadge status={appointment.status}>

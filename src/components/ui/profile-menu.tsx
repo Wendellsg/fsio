@@ -1,5 +1,6 @@
 "use client";
 
+import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { UserRoleEnum } from "@prisma/client";
 import Link from "next/link";
@@ -16,6 +17,7 @@ import { Skeleton } from "./skeleton";
 
 export function ProfileMenu() {
   const { userData } = useUserData();
+  const { logout } = useAuth();
 
   return (
     <DropdownMenu>
@@ -44,10 +46,8 @@ export function ProfileMenu() {
           </DropdownMenuItem>
         )}
         <DropdownMenuSeparator />
-        <DropdownMenuItem className="cursor-pointer">
-          <a href="/api/auth/signout" className="w-full h-full">
-            Sair
-          </a>
+        <DropdownMenuItem className="cursor-pointer" onClick={logout}>
+          Sair
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

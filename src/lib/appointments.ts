@@ -17,7 +17,7 @@ export const getAppointmentsByHour = (
   [key: string]: AppointmentGetPayload[];
 } => {
   const appointmentsByHour = appointments?.reduce((acc, appointment) => {
-    const hour = format(new Date(appointment.startDate), "HH") + ":00";
+    const hour = appointment.startDateTime.split(":")[0] + ":00";
     return {
       ...acc,
       [hour]: [...(acc[hour] || []), appointment],

@@ -35,12 +35,14 @@ model Address {
 model Appointment {
   id                 String                @id
   startDate          DateTime
-  endDate            DateTime
   status             AppointmentStatusEnum @default(scheduled)
   createdAt          DateTime              @default(now())
   updatedAt          DateTime              @default(now())
   professionalId     String
   patientId          String
+  timeZone           Decimal               @default(0)
+  endDateTime        String
+  startDateTime      String
   User               User                  @relation(fields: [patientId], references: [id], onDelete: Cascade)
   Professional       Professional          @relation(fields: [professionalId], references: [id], onDelete: Cascade)
   AppointmentComment AppointmentComment?

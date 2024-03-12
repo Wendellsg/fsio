@@ -48,8 +48,6 @@ export const fisioFetcher = async ({
 
     if (onError) {
       onError(error.response?.data.message);
-    } else {
-      toast.error(error.response?.data.message);
     }
   } finally {
     loadingFunction && loadingFunction(false);

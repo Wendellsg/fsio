@@ -1,5 +1,6 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { translateUserRole } from "@/types";
 import { UserRoleEnum } from "@prisma/client";
@@ -14,9 +15,7 @@ const pathByRole = {
 
 export const AlreadyLoggedCard = () => {
   const { userData } = useUserData();
-
-  console.log(userData);
-
+  const { logout } = useAuth();
   return (
     <div className="flex flex-col items-center justify-center gap-4 rounded-xl bg-white p-8 shadow-10px">
       <Avatar className="w-40 h-40">
@@ -43,8 +42,13 @@ export const AlreadyLoggedCard = () => {
           </Button>
         ))}
 
-        <Button variant={"outline"} type="button" className="w-36">
-          <a href="/api/auth/signout">Sair</a>
+        <Button
+          variant={"outline"}
+          type="button"
+          className="w-36"
+          onClick={logout}
+        >
+          Sair
         </Button>
       </div>
     </div>
