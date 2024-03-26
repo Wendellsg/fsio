@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
 
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export const fisioApi = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_ENDPOINT,

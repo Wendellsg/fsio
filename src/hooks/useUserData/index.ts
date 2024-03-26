@@ -1,5 +1,5 @@
 "use client";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { fisioFetcher } from "../Apis";
 
 import { UserUpdateData } from "@/lib/zod-schemas";

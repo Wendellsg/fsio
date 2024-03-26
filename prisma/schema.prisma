@@ -8,56 +8,44 @@ datasource db {
 }
 
 model Activity {
-  id          String   @id
+  id          String   @id @default(uuid())
   createdAt   DateTime @default(now())
   comments    String
   painLevel   Int
   effortLevel Int
   date        DateTime
   routineId   String
-  Routine     Routine  @relation(fields: [routineId], references: [id], onDelete: Cascade)
-}
-
-model Address {
-  id           String        @id
-  street       String
-  number       String
-  city         String
-  state        String
-  zipCode      String
-  createdAt    DateTime      @default(now())
-  updatedAt    DateTime
-  userId       String?       @unique
-  User         User?         @relation(fields: [userId], references: [id])
-  Professional Professional?
+  routine     Routine  @relation(fields: [routineId], references: [id], onDelete: Cascade)
 }
 
 model Appointment {
-  id                 String                @id
-  startDate          DateTime
-  status             AppointmentStatusEnum @default(scheduled)
-  createdAt          DateTime              @default(now())
-  updatedAt          DateTime              @default(now())
-  professionalId     String
-  patientId          String
-  timeZone           Decimal               @default(0)
-  endDateTime        String
-  startDateTime      String
-  User               User                  @relation(fields: [patientId], references: [id], onDelete: Cascade)
-  Professional       Professional          @relation(fields: [professionalId], references: [id], onDelete: Cascade)
-  AppointmentComment AppointmentComment?
+  id             String                @id @default(uuid())
+  startDate      DateTime
+  timeZone       Decimal               @default(0)
+  startDateTime  String
+  endDateTime    String
+  status         AppointmentStatusEnum @default(scheduled)
+  createdAt      DateTime              @default(now())
+  updatedAt      DateTime              @default(now())
+  professionalId String
+  professional   Professional          @relation(fields: [professionalId], references: [id], onDelete: Cascade)
+  patientId      String
+  patient        User                  @relation(fields: [patientId], references: [id], onDelete: Cascade)
+  comments       AppointmentComment[]
 }
 
 model AppointmentComment {
-  id            String      @id
+  id            String      @id @default(uuid())
   createdAt     DateTime    @default(now())
   comment       String
-  appointmentId String      @unique
+  appointmentId String
   Appointment   Appointment @relation(fields: [appointmentId], references: [id])
+
+  @@unique([appointmentId])
 }
 
 model Evolution {
-  id                String       @id
+  id                String       @id @default(uuid())
   date              DateTime
   clinicalDiagnosis String
   physicalDiagnosis String
@@ -65,85 +53,39 @@ model Evolution {
   createdAt         DateTime     @default(now())
   updatedAt         DateTime
   professionalId    String
+  professional      Professional @relation(fields: [professionalId], references: [id])
   userId            String
-  Professional      Professional @relation(fields: [professionalId], references: [id])
-  User              User         @relation(fields: [userId], references: [id])
+  user              User         @relation(fields: [userId], references: [id])
 }
 
 model Exercise {
-  id              String               @id
-  name            String
-  description     String
-  category        ExerciseCategoryEnum
-  image           String?
-  video           String?
-  summary         String
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime
-  Routine         Routine[]
-  ExercisesOnUser ExercisesOnUser[]    @relation("ExerciseToExercisesOnUser")
+  id          String               @id @default(uuid())
+  name        String
+  description String
+  category    ExerciseCategoryEnum
+  image       String?
+  video       String?
+  summary     String
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+  routines    Routine[]
+  users       ExercisesOnUser[]
 }
 
 model ExercisesOnUser {
-  id         String     @id
+  id         String     @id @default(uuid())
   createdAt  DateTime   @default(now())
-  updatedAt  DateTime
+  updatedAt  DateTime   @updatedAt
   exerciseId String
   userId     String
-  User       User       @relation(fields: [userId], references: [id])
-  Exercise   Exercise[] @relation("ExerciseToExercisesOnUser")
-}
-
-model FileUploaded {
-  id        String        @id
-  createdAt DateTime      @default(now())
-  updatedAt DateTime
-  name      String
-  key       String
-  type      FileTypeEnum
-  size      Int
-  extension ExtensionEnum
-  userId    String
-  User      User[]        @relation("FileUploadedToUser")
-}
-
-model Professional {
-  id                             String        @id
-  addressId                      String        @unique
-  phone                          String?
-  profession                     String
-  license                        String
-  licenseState                   String
-  licenseImage                   String?
-  verifiedAt                     DateTime?
-  presentation                   String?
-  createdAt                      DateTime      @default(now())
-  updatedAt                      DateTime
-  userId                         String        @unique
-  Appointment                    Appointment[]
-  Evolution                      Evolution[]
-  Address                        Address       @relation(fields: [addressId], references: [id], onDelete: Cascade)
-  User_Professional_userIdToUser User          @relation("Professional_userIdToUser", fields: [userId], references: [id])
-  Request                        Request[]
-  Routine                        Routine[]
-  User_ProfessionalsToPatients   User[]        @relation("ProfessionalsToPatients")
-}
-
-model Request {
-  id             String            @id
-  createdAt      DateTime          @default(now())
-  updatedAt      DateTime
-  status         RequestStatusEnum @default(pending)
-  professionalId String
-  userId         String
-  Professional   Professional      @relation(fields: [professionalId], references: [id])
-  User           User              @relation(fields: [userId], references: [id])
+  user       User       @relation(fields: [userId], references: [id])
+  Exercise   Exercise[]
 }
 
 model Routine {
-  id             String                   @id
+  id             String                   @id @default(uuid())
   createdAt      DateTime                 @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime                 @updatedAt
   description    String
   frequency      Int
   frequencyType  RoutineFrequencyTypeEnum @default(day)
@@ -151,53 +93,128 @@ model Routine {
   series         Int
   period         RoutinePeriodEnum        @default(morning)
   userId         String
+  user           User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
   professionalId String
+  professional   Professional             @relation(fields: [professionalId], references: [id], onDelete: Cascade)
   exerciseId     String
-  Activity       Activity[]
-  Exercise       Exercise                 @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
-  Professional   Professional             @relation(fields: [professionalId], references: [id], onDelete: Cascade)
-  User           User                     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  exercise       Exercise                 @relation(fields: [exerciseId], references: [id], onDelete: Cascade)
+  activities     Activity[]
 }
 
 model User {
-  id                                     String            @id
-  name                                   String
-  email                                  String            @unique
-  password                               String?
-  resetPasswordToken                     String?
-  createdAt                              DateTime          @default(now())
-  updatedAt                              DateTime
-  image                                  String?
-  imageFileId                            String?
-  phone                                  String?
-  roles                                  UserRoleEnum[]    @default([patient])
-  height                                 Int?
-  weight                                 Int?
-  birthDate                              DateTime?
-  accountVerifiedAt                      DateTime?
-  accountVerifyToken                     String?
-  Address                                Address?
-  Appointment                            Appointment[]
-  Evolution                              Evolution[]
-  ExercisesOnUser                        ExercisesOnUser[]
-  Professional_Professional_userIdToUser Professional?     @relation("Professional_userIdToUser")
-  Request                                Request[]
-  Routine                                Routine[]
-  FileUploaded                           FileUploaded[]    @relation("FileUploadedToUser")
-  Professional_ProfessionalsToPatients   Professional[]    @relation("ProfessionalsToPatients")
+  id                 String            @id @default(uuid())
+  name               String
+  email              String            @unique
+  password           String?
+  resetPasswordToken String?
+  createdAt          DateTime          @default(now())
+  updatedAt          DateTime          @updatedAt
+  image              String?
+  imageFileId        String?
+  phone              String?
+  roles              UserRoleEnum[]    @default([patient])
+  height             Int?
+  weight             Int?
+  birthDate          DateTime?
+  professionals      Professional[]    @relation("ProfessionalsToPatients")
+  address            Address?
+  appointments       Appointment[]
+  evolutions         Evolution[]
+  routines           Routine[]
+  files              FileUploaded[]
+  requests           Request[]
+  favoriteExercises  ExercisesOnUser[]
+  professional       Professional?
+  accountVerifiedAt  DateTime?
+  accountVerifyToken String?
 }
 
-model Lead {
-  id        String   @id
-  email     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime
+model Request {
+  id             String            @id @default(uuid())
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  status         RequestStatusEnum @default(pending)
+  professionalId String
+  professional   Professional      @relation(fields: [professionalId], references: [id])
+  userId         String
+  user           User              @relation(fields: [userId], references: [id])
 }
 
-enum AppointmentStatusEnum {
-  scheduled
-  canceled
-  done
+model Professional {
+  id           String        @id @default(uuid())
+  address      Address       @relation(fields: [addressId], references: [id], onDelete: Cascade)
+  addressId    String        @unique
+  phone        String?
+  profession   String
+  license      String
+  licenseState String
+  licenseImage String?
+  verifiedAt   DateTime?
+  presentation String?
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  appointments Appointment[]
+  evolutions   Evolution[]
+  routines     Routine[]
+  requests     Request[]
+  patients     User[]        @relation("ProfessionalsToPatients")
+  userId       String        @unique
+  user         User          @relation(fields: [userId], references: [id])
+}
+
+model FileUploaded {
+  id        String        @id @default(uuid())
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+  name      String
+  key       String
+  type      FileTypeEnum
+  size      Int
+  extension ExtensionEnum
+  user      User[]
+  userId    String
+}
+
+enum FileTypeEnum {
+  image
+  video
+  document
+}
+
+enum ExtensionEnum {
+  jpg
+  jpeg
+  webp
+  png
+  gif
+  mp4
+  pdf
+  doc
+  docx
+  xls
+  xlsx
+  ppt
+  pptx
+  txt
+  csv
+  zip
+  rar
+  tar
+  gz
+}
+
+model Address {
+  id           String        @id @default(uuid())
+  street       String
+  number       String
+  city         String
+  state        String
+  zipCode      String
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  userId       String?       @unique
+  user         User?         @relation(fields: [userId], references: [id])
+  Professional Professional?
 }
 
 enum ExerciseCategoryEnum {
@@ -208,12 +225,6 @@ enum ExerciseCategoryEnum {
   shoulders
   abs
   cardio
-}
-
-enum RequestStatusEnum {
-  pending
-  accepted
-  rejected
 }
 
 enum RoutineFrequencyTypeEnum {
@@ -234,29 +245,21 @@ enum UserRoleEnum {
   admin
 }
 
-enum ExtensionEnum {
-  jpg
-  jpeg
-  png
-  gif
-  mp4
-  pdf
-  doc
-  docx
-  xls
-  xlsx
-  ppt
-  pptx
-  txt
-  csv
-  zip
-  rar
-  tar
-  gz
+enum AppointmentStatusEnum {
+  scheduled
+  canceled
+  done
 }
 
-enum FileTypeEnum {
-  image
-  video
-  document
+enum RequestStatusEnum {
+  pending
+  accepted
+  rejected
+}
+
+model Lead {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

@@ -5,6 +5,7 @@ import "./globals.css";
 import { Metadata } from "next";
 import { Providers } from "../providers";
 
+import { Toaster } from "@/components/ui/sonner";
 import { cn, fontSans } from "@/lib/utils";
 
 setDefaultOptions({ locale: ptBR });
@@ -25,6 +26,7 @@ export default function RootLayout({
         className={cn("min-h-screen font-sans antialiased", fontSans.variable)}
       >
         <Providers>{children}</Providers>
+        <Toaster />
       </body>
     </html>
   );

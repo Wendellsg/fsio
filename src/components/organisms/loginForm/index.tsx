@@ -15,7 +15,7 @@ export function LoginForm() {
 
   if (isLoading) return <Loading size={50} />;
 
-  if (userData) {
+  if (userData?.id) {
     return <AlreadyLoggedCard />;
   }
 

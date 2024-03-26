@@ -17,7 +17,7 @@ import { User } from "@prisma/client";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { BsSearch } from "react-icons/bs";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 
 export const NewPatientModal: React.FC<{
   trigger: React.ReactNode;
@@ -110,7 +110,7 @@ export const NewPatientModal: React.FC<{
                   const patient = patients.find((p) => p.email === email);
 
                   if (patient) {
-                    toast.warn("Paciente já adicionado");
+                    toast.warning("Paciente já adicionado");
                     return;
                   }
 

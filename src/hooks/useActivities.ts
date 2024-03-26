@@ -1,5 +1,5 @@
 import { Activity } from "@prisma/client";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { fisioFetcher } from "./Apis";
 
 export const useActivities = () => {

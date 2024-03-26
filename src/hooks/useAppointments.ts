@@ -3,7 +3,7 @@ import { AppointmentGetPayload } from "@/types";
 import { AppointmentComment, Prisma } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { format } from "date-fns";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { fisioFetcher } from "./Apis";
 import { useUserData } from "./useUserData";
 

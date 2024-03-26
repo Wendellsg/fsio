@@ -1,9 +1,13 @@
-import { Exercise } from "@prisma/client";
+import { Exercise, Prisma } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "react-toastify";
+import { toast } from "sonner";
 import { fisioFetcher } from "./Apis";
 export const useExercises = () => {
-  const { data: exercises, isLoading } = useQuery({
+  const {
+    data: exercises,
+    isLoading,
+    refetch,
+  } = useQuery({
     queryKey: ["exercises"],
     queryFn: () => getExercises(),
     staleTime: 1000 * 60 * 10,
@@ -35,7 +39,9 @@ export const useExercises = () => {
     return response;
   };
 
-  const createExercise = async (exercise: Exercise) => {
+  const createExercise = async (
+    exercise: Prisma.ExerciseUncheckedCreateInput
+  ) => {
     await fisioFetcher({
       url: "/exercises",
       method: "POST",
@@ -47,7 +53,9 @@ export const useExercises = () => {
     });
   };
 
-  const updateExercise = async (exercise: Exercise) => {
+  const updateExercise = async (
+    exercise: Prisma.ExerciseUncheckedUpdateInput
+  ) => {
     await fisioFetcher({
       url: `/exercises/${exercise.id}`,
       method: "PATCH",
@@ -78,6 +86,7 @@ export const useExercises = () => {
     createExercise,
     updateExercise,
     deleteExercise,
+    refetch,
   };
 };
 

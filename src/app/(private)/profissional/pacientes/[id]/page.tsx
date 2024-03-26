@@ -23,7 +23,7 @@ import { FaEnvelope, FaRulerVertical, FaWeight } from "react-icons/fa";
 import { HiCake } from "react-icons/hi";
 import { IoLogoWhatsapp } from "react-icons/io";
 import { RiEditBoxFill, RiMapPin2Fill } from "react-icons/ri";
-import { toast } from "react-toastify"; */
+import { toast } from "sonner"; */
 
 export default function PacientePage({
   params,
