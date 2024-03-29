@@ -17,6 +17,7 @@ import {
   DialogTrigger,
 } from "../ui/dialog";
 import { Input } from "../ui/input";
+import { Label } from "../ui/label";
 import {
   Select,
   SelectContent,
@@ -97,9 +98,13 @@ export const ExercisesForm = ({
 
         {content === ContentEnum.BASIC && (
           <>
+            <Label htmlFor="name" className="text-muted text-xs">
+              Nome
+            </Label>
             <Input
               value={newExercise.name}
               name="name"
+              id="name"
               onChange={(e) => {
                 setNewExercise({
                   ...newExercise,
@@ -111,6 +116,9 @@ export const ExercisesForm = ({
               width="100%"
             />
 
+            <Label htmlFor="category" className="text-muted text-xs">
+              Categoria
+            </Label>
             <Select
               value={newExercise.category!}
               onValueChange={(value: ExerciseCategoryEnum) => {
@@ -120,7 +128,7 @@ export const ExercisesForm = ({
                 });
               }}
             >
-              <SelectTrigger className="w-[180px]">
+              <SelectTrigger className="w-full" id="category">
                 <SelectValue placeholder="Categoria" />
               </SelectTrigger>
 
@@ -133,8 +141,12 @@ export const ExercisesForm = ({
               </SelectContent>
             </Select>
 
+            <Label htmlFor="description" className="text-muted text-xs">
+              Descrição
+            </Label>
             <Textarea
               value={newExercise.description}
+              id="description"
               name="description"
               onChange={(e) => {
                 setNewExercise({
@@ -145,9 +157,13 @@ export const ExercisesForm = ({
               placeholder="Descrição do exercício"
             />
 
+            <Label htmlFor="summary" className="text-muted text-xs">
+              Descrição
+            </Label>
             <Textarea
               value={newExercise.summary}
               name="summary"
+              id="summary"
               onChange={(e) => {
                 setNewExercise({
                   ...newExercise,
@@ -157,34 +173,39 @@ export const ExercisesForm = ({
               placeholder="Sumário do exercício"
             />
 
-            <h3 className=" text-muted">Imagem do exercício</h3>
+            <Label htmlFor="image" className="text-muted text-xs">
+              Imagem
+            </Label>
 
-            <div className="w-full max-w-full overflow-clip">
+            <div className="w-full max-w-full overflow-clip rounded-md hover:shadow-md">
               <img
                 onClick={() => {
                   setContent(ContentEnum.IMAGE);
                 }}
+                id="image"
                 src={
                   resolvePath(newExercise.image as string) ||
                   "https://blog.iprocess.com.br/wp-content/uploads/2021/11/placeholder.png"
                 }
                 alt="image"
-                className="w-full h-full object-cover rounded-md cursor-pointer hover:blur-sm transition-transform duration-300 ease-in-out"
+                className="w-full h-full object-cover rounded-md cursor-pointer  transition-transform duration-300 ease-in-out"
               />
             </div>
 
-            <h3 className="text-muted">Vídeo do exercício</h3>
+            <Label htmlFor="video" className="text-muted text-xs">
+              Video
+            </Label>
 
-            <div className="w-full max-w-full overflow-clip">
+            <div className="w-full max-w-full overflow-clip rounded-md hover:shadow-md">
               <video
                 onClick={() => {
                   setContent(ContentEnum.VIDEO);
                 }}
-                src={
-                  resolvePath(newExercise.video as string) ||
+                poster={
                   "https://blog.iprocess.com.br/wp-content/uploads/2021/11/placeholder.png"
                 }
-                className="w-full h-full object-cover rounded-md cursor-pointer hover:blur-sm transition-transform duration-300 ease-in-out"
+                src={resolvePath(newExercise.video as string)}
+                className="w-full h-full object-cover rounded-md cursor-pointer transition-transform duration-300 ease-in-out"
               />
             </div>
           </>

@@ -22,14 +22,21 @@ export function SignUpForm() {
     formState: { errors },
   } = useForm<SignUpData>({
     resolver: zodResolver(signUpDataSchema),
+    defaultValues: {
+      isProfessional: false,
+    },
   });
 
   const router = useRouter();
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [signUpError, setSignUpError] = useState("");
 
+  console.log(errors);
+
   const handleSignUp = async (signUpData: SignUpData) => {
     setIsSigningUp(true);
+
+    console.log(signUpData);
 
     if (signUpData.password !== signUpData.passwordConfirmation) {
       setSignUpError("As senhas não coincidem");
@@ -100,7 +107,7 @@ export function SignUpForm() {
 
         <Input
           placeholder="Senha"
-          type="text"
+          type="password"
           name="password"
           id="password"
           register={register}
@@ -115,8 +122,8 @@ export function SignUpForm() {
         <Label htmlFor="password-confirmation">Confirmação de Senha</Label>
 
         <Input
+          type="password"
           placeholder="Senha"
-          type="text"
           name="passwordConfirmation"
           register={register}
           id="password-confirmation"
@@ -139,8 +146,8 @@ export function SignUpForm() {
           }}
         />
 
-        {errors?.passwordConfirmation?.message && (
-          <InputError>{errors?.passwordConfirmation?.message}</InputError>
+        {errors?.isProfessional?.message && (
+          <InputError>{errors?.isProfessional?.message}</InputError>
         )}
       </InputBox>
 

@@ -24,7 +24,7 @@ export const fisioFetcher = async ({
   data?: any;
   loadingFunction?: (value: boolean) => void;
   callback?: (data?: any) => void;
-  onError?: (error: any) => void;
+  onError?: (error: string) => void;
 }) => {
   loadingFunction && loadingFunction(true);
   try {

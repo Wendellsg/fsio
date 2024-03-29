@@ -71,16 +71,14 @@ export const signUpDataSchema = z.object({
     .string({
       required_error: "Campo obrigatório",
     })
-    .min(6, "Senha deve ter no mínimo 6 caracteres")
-    .regex(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{6,}$/,
-      "Senha deve conter pelo menos uma letra maiúscula, uma letra minúscula e um número"
-    ),
+    .min(6, "Senha deve ter no mínimo 6 caracteres"),
   passwordConfirmation: z.string({
     required_error: "Campo obrigatório",
   }),
 
-  isProfessional: z.boolean(),
+  isProfessional: z.boolean({
+    required_error: "Campo obrigatório",
+  }),
 });
 
 export type SignUpData = z.infer<typeof signUpDataSchema>;
