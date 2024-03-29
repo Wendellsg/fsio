@@ -1,11 +1,12 @@
 import { ResetPasswordForm } from "@/components/organisms/resetPasswordForm";
-
-const Login = () => {
+export default function ResetPasswordPage({
+  searchParams,
+}: {
+  searchParams: { token: string };
+}) {
   return (
     <section>
-      <ResetPasswordForm />
+      <ResetPasswordForm token={searchParams.token} />
     </section>
   );
-};
-
-export default Login;
+}

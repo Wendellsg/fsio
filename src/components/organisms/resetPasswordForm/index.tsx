@@ -4,18 +4,15 @@ import { Input, InputBox } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loading } from "@/components/ui/loading";
 import { fisioFetcher } from "@/hooks/Apis";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
 
-export function ResetPasswordForm() {
+export function ResetPasswordForm({ token }: { token: string }) {
   const [password, setPassword] = useState("");
   const [passwordConfirmation, setPasswordConfirmation] = useState("");
   const [pending, setPending] = useState(false);
-  const searchParams = useSearchParams();
   const router = useRouter();
-
-  const token = searchParams.get("token");
 
   function forgotPassword(e: React.FormEvent) {
     e.preventDefault();

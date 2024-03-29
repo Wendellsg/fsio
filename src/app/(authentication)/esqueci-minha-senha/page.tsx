@@ -1,11 +1,9 @@
 import { ForgotPasswordForm } from "@/components/organisms/forgotPasswordForm";
 
-const Login = () => {
+export default function ForgotPasswordPage() {
   return (
     <section>
       <ForgotPasswordForm />
     </section>
   );
-};
-
-export default Login;
+}
