@@ -3,12 +3,6 @@
 import { ExercisesForm } from "@/components/forms/exercise-form";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   Table,
@@ -21,14 +15,10 @@ import {
 import { useExercises } from "@/hooks";
 import { Exercise } from "@prisma/client";
 import { format } from "date-fns";
-import { Trash2, User as UserIcon } from "lucide-react";
-import Link from "next/link";
-import { FaEllipsisVertical } from "react-icons/fa6";
+import { Pencil, Trash2 } from "lucide-react";
 
 export function ExercisesTable() {
   const { exercises, isLoading, refetch, deleteExercise } = useExercises();
-
-  console.log(exercises);
 
   return (
     <div className="mx-auto p-4 border rounded-md">
@@ -42,9 +32,9 @@ export function ExercisesTable() {
       <Table>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Nome</TableHead>
-            <TableHead>Cadastro</TableHead>
-            <TableHead className="text-right">Ações</TableHead>
+            <TableHead className="">Nome</TableHead>
+            <TableHead>Criação</TableHead>
+            <TableHead className="text-right w-[120px]">Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -59,31 +49,25 @@ export function ExercisesTable() {
                   {format(new Date(exercise.createdAt), "dd/MM/yyyy")}
                 </TableCell>
 
-                <TableCell className="text-right">
-                  <DropdownMenu>
-                    <DropdownMenuTrigger>
-                      <FaEllipsisVertical className="rotate-90" />
-                    </DropdownMenuTrigger>
-                    <DropdownMenuContent>
-                      <DropdownMenuItem>
-                        <Link
-                          className="flex w-full h-full"
-                          href={`/admin/exercicios/${exercise.id}`}
-                        >
-                          <UserIcon className="w-4 h-4 mr-2" />
-                          Perfil
-                        </Link>
-                      </DropdownMenuItem>
+                <TableCell className="flex">
+                  <ExercisesForm
+                    onSubmit={refetch}
+                    exercise={exercise}
+                    trigger={
+                      <Button variant={"ghost"}>
+                        <Pencil className="w-4 h-4" />
+                        <span className="sr-only">Editar</span>
+                      </Button>
+                    }
+                  />
 
-                      <DropdownMenuItem
-                        className="cursor-pointer"
-                        onClick={() => deleteExercise(exercise.id)}
-                      >
-                        <Trash2 className="w-4 h-4 mr-2" />
-                        Excluir
-                      </DropdownMenuItem>
-                    </DropdownMenuContent>
-                  </DropdownMenu>
+                  <Button
+                    variant={"ghost"}
+                    onClick={() => deleteExercise(exercise.id)}
+                  >
+                    <Trash2 className="w-4 h-4" />
+                    <span className="sr-only">Excluir</span>
+                  </Button>
                 </TableCell>
               </TableRow>
             );

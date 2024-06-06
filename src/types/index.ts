@@ -1,6 +1,7 @@
 import {
   Appointment,
   AppointmentStatusEnum,
+  ExerciseCategoryEnum,
   Request,
   RequestStatusEnum,
   RoutineFrequencyTypeEnum,
@@ -102,6 +103,29 @@ export function translateUserRole(role: UserRoleEnum) {
       return "Profissional";
     case UserRoleEnum.patient:
       return "Paciente";
+    default:
+      return "";
+  }
+}
+
+export function translateExerciseCategory(category: ExerciseCategoryEnum) {
+  switch (category) {
+    case ExerciseCategoryEnum.ankleAndFeet:
+      return "Tornozelo e Pés";
+    case ExerciseCategoryEnum.knees:
+      return "Joelhos";
+    case ExerciseCategoryEnum.hipAndPelvis:
+      return "Quadril e Pélvis";
+    case ExerciseCategoryEnum.thoracicAndLowBack:
+      return "Torácica e Lombar";
+    case ExerciseCategoryEnum.cervical:
+      return "Cervical";
+    case ExerciseCategoryEnum.fistsAndHands:
+      return "Mãos e Punhos";
+    case ExerciseCategoryEnum.shoulders:
+      return "Ombros";
+    case ExerciseCategoryEnum.elbowsAndForearms:
+      return "Cotovelos e Antebraços";
     default:
       return "";
   }

@@ -4,7 +4,13 @@ import { useState } from "react";
 import { useExercises } from "../../hooks";
 
 import { resolvePath } from "@/lib/cdn";
-import { Exercise, ExerciseCategoryEnum, Prisma } from "@prisma/client";
+import { translateExerciseCategory } from "@/types";
+import {
+  Exercise,
+  ExerciseCategoryEnum,
+  FileTypeEnum,
+  Prisma,
+} from "@prisma/client";
 import { DialogTitle } from "@radix-ui/react-dialog";
 import { UploadCard } from "../organisms/uploadCard";
 import { Button } from "../ui/button";
@@ -135,7 +141,7 @@ export const ExercisesForm = ({
               <SelectContent>
                 {Object.values(ExerciseCategoryEnum).map((category) => (
                   <SelectItem key={category} value={category}>
-                    {category}
+                    {translateExerciseCategory(category)}
                   </SelectItem>
                 ))}
               </SelectContent>
@@ -183,10 +189,7 @@ export const ExercisesForm = ({
                   setContent(ContentEnum.IMAGE);
                 }}
                 id="image"
-                src={
-                  resolvePath(newExercise.image as string) ||
-                  "https://blog.iprocess.com.br/wp-content/uploads/2021/11/placeholder.png"
-                }
+                src={resolvePath(newExercise.image as string)}
                 alt="image"
                 className="w-full h-full object-cover rounded-md cursor-pointer  transition-transform duration-300 ease-in-out"
               />
@@ -202,10 +205,13 @@ export const ExercisesForm = ({
                   setContent(ContentEnum.VIDEO);
                 }}
                 poster={
-                  "https://blog.iprocess.com.br/wp-content/uploads/2021/11/placeholder.png"
+                  !!newExercise.video
+                    ? ""
+                    : "https://blog.iprocess.com.br/wp-content/uploads/2021/11/placeholder.png"
                 }
+                controls={!!newExercise.video}
                 src={resolvePath(newExercise.video as string)}
-                className="w-full h-full object-cover rounded-md cursor-pointer transition-transform duration-300 ease-in-out"
+                className="w-full h-full max-h-[70dvh]  object-cover rounded-md cursor-pointer transition-transform duration-300 ease-in-out"
               />
             </div>
           </>
@@ -224,6 +230,8 @@ export const ExercisesForm = ({
                   image: file,
                 });
               }}
+              selected={newExercise.image}
+              type={FileTypeEnum.image}
               close={() => {
                 setContent(ContentEnum.BASIC);
               }}
@@ -244,6 +252,8 @@ export const ExercisesForm = ({
                   video: file,
                 });
               }}
+              type={FileTypeEnum.video}
+              selected={newExercise.video}
               close={() => {
                 setContent(ContentEnum.BASIC);
               }}
@@ -251,21 +261,26 @@ export const ExercisesForm = ({
           </>
         )}
 
-        <div className="flex gap-4 items-center mt-4 w-full justify-center">
+        <div
+          data-hide={content !== ContentEnum.BASIC}
+          className="flex data-[hide=true]:hidden gap-4 items-center mt-4 w-full justify-center"
+        >
           <DialogClose asChild>
             <Button onClick={onSubmit} className="w-36" variant="destructive">
               Cancelar
             </Button>
           </DialogClose>
 
-          <Button
-            onClick={handleSave}
-            className="w-36"
-            disabled={submitting}
-            type="submit"
-          >
-            Salvar
-          </Button>
+          <DialogClose asChild>
+            <Button
+              onClick={handleSave}
+              className="w-36"
+              disabled={submitting}
+              type="submit"
+            >
+              Salvar
+            </Button>
+          </DialogClose>
         </div>
       </DialogContent>
     </Dialog>

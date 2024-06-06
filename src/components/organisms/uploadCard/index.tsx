@@ -4,25 +4,46 @@ import { Loading } from "@/components/ui/loading";
 import { useFileUploaded } from "@/hooks/useFileUploaded";
 import { resolvePath } from "@/lib/cdn";
 import { FileTypeEnum, FileUploaded } from "@prisma/client";
-import { ImageUp, Images, Trash } from "lucide-react";
+import { ImageIcon, ImageUp, Images, Trash, Video } from "lucide-react";
 import Image from "next/image";
 import { useState } from "react";
 
 export function UploadCard({
   onSelect,
   close,
+  selected,
+  type,
 }: {
   close: () => void;
   onSelect: (file: string) => void;
+  selected?: string | null;
+  type: FileTypeEnum;
 }) {
   const [selectedFile, setSelectedFile] = useState<FileUploaded | null>(null);
   const { files, isLoading, refetch } = useFileUploaded();
+
+  function playVideo(key: string) {
+    const video = document.getElementById(key) as HTMLVideoElement;
+
+    if (video) {
+      video.play();
+    }
+  }
+
+  function stopVideo(key: string) {
+    const video = document.getElementById(key) as HTMLVideoElement;
+
+    if (video) {
+      //Back to the beginning
+      video.currentTime = 0;
+      video.pause();
+    }
+  }
 
   return (
     <div className="w-full">
       <div className="w-full">
         <h4 className="font-bold">Seus arquivos</h4>
-
         <div className="w-full max-w-full flex-wrap flex">
           {isLoading && <Loading />}
 
@@ -31,28 +52,46 @@ export function UploadCard({
               <div
                 key={file.id}
                 data-selected={selectedFile?.id === file.id}
-                className="w-32 h-32 bg-gray-200 rounded-md m-2 data-[selected=true]:outline outline-offset-2 outline-accent cursor-pointer"
+                data-prevSelected={selected === file.key}
+                data-disabled={file.type !== type}
+                className="w-32 relative h-32 bg-gray-200 rounded-md m-2 data-[selected=true]:outline-accent data-[prevSelected=true]:outline-sky/50 outline outline-offset-2 outline-transparent cursor-pointer data-[disabled=true]:bg-gray-400 data-[disabled=true]:opacity-50 transition-colors duration-300 ease-in-out"
                 onClick={() => {
-                  setSelectedFile(file);
+                  if (file.type === type) {
+                    if (selectedFile?.id === file.id) {
+                      setSelectedFile(null);
+                      return;
+                    }
+
+                    setSelectedFile(file);
+                  }
                 }}
               >
                 {file.type.includes("image") ? (
                   <Image
-                    src={
-                      resolvePath(file.key) ||
-                      "https://blog.iprocess.com.br/wp-content/uploads/2021/11/placeholder.png"
-                    }
+                    src={resolvePath(file.key)}
                     alt={file.name}
-                    className="w-full h-full object-cover rounded-md"
+                    className="w-full h-full object-cover rounded-md "
                     width={120}
                     height={120}
                   />
                 ) : (
                   <video
+                    id={file.key}
+                    data-disabled={file.type !== type}
                     src={resolvePath(file.key)}
                     className="w-full h-full object-cover rounded-md"
+                    onMouseOver={() => playVideo(file.key)}
+                    onMouseOut={() => stopVideo(file.key)}
                   />
                 )}
+
+                <div className="absolute bg-gray-400 text-white text-xs p-1 rounded-full right-1 bottom-2">
+                  {file.type === FileTypeEnum.image ? (
+                    <ImageIcon size={15} />
+                  ) : (
+                    <Video size={15} />
+                  )}
+                </div>
               </div>
             );
           })}

@@ -1,5 +1,6 @@
 import NavMenu, { MenuItem } from "@/components/organisms/navigation";
 import { AppContainer, PageContent } from "@/components/ui/layouts";
+import { ProfessionalProvider } from "@/providers/professional-provider";
 import {
   FaCalendarCheck,
   FaDumbbell,
@@ -38,8 +39,10 @@ export default function ProfessionalLayout({
 
   return (
     <AppContainer>
-      <NavMenu menuItems={menuItems} />
-      <PageContent>{children}</PageContent>
+      <ProfessionalProvider>
+        <NavMenu menuItems={menuItems} />
+        <PageContent>{children}</PageContent>
+      </ProfessionalProvider>
     </AppContainer>
   );
 }
