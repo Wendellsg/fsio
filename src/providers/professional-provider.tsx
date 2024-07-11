@@ -42,8 +42,8 @@ export function ProfessionalProvider({
             Finalize seu cadastro para acessar o sistema como profissional.
           </p>
 
-          <Link href={"/perfil/editar"} className="mt-8">
-            <Button className="btn btn-primary">Finalizar cadastro</Button>
+          <Link href={"/perfil/profissional/editar"} className="mt-8">
+            <Button className="">Finalizar cadastro</Button>
           </Link>
 
           <div className="hidden md:flex justify-center items-center mt-16">

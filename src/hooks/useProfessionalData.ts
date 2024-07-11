@@ -4,13 +4,13 @@ import { Professional } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { fisioFetcher } from "./Apis";
 
-export const useProfessionalData = () => {
+export function useProfessionalData() {
   const {
     data: professionalData,
     isLoading,
     refetch,
   } = useQuery({
-    queryFn: async (): Promise<Partial<Professional>> => {
+    queryFn: async (): Promise<Professional> => {
       return await fisioFetcher({
         url: "/professionals/me",
         method: "GET",
@@ -25,4 +25,4 @@ export const useProfessionalData = () => {
     isLoading,
     refetch,
   };
-};
+}
