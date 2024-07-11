@@ -4,7 +4,7 @@ import { useAuth } from "@/hooks/useAuth";
 import { useUserData } from "@/hooks/useUserData";
 import { UserRoleEnum } from "@prisma/client";
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "./avatar";
+import { ProfileImage } from "../molecules/profile-image";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -22,20 +22,19 @@ export function ProfileMenu() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger>
-        <Avatar className="w-20 h-20">
-          <AvatarImage src={userData?.image || ""} />
-          <AvatarFallback>
-            {userData?.name?.split(" ")[0][0]}
-            {userData?.name?.split(" ")[1][0]}
-          </AvatarFallback>
-        </Avatar>
+        <ProfileImage className="w-20 h-20" />
       </DropdownMenuTrigger>
       <DropdownMenuContent side="bottom">
         <DropdownMenuLabel>Minha conta</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Link href={"/perfil"} className="w-full h-full">
+          <Link href={"/perfil/profissional"} className="w-full h-full">
             Perfil
+          </Link>
+        </DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href={"/perfil/profissional/editar"} className="w-full h-full">
+            Editar
           </Link>
         </DropdownMenuItem>
         {userData?.roles?.includes(UserRoleEnum.professional) && (

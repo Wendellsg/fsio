@@ -9,7 +9,7 @@ import { Professional, ProfessionalTitleEnum } from "@prisma/client";
 import { SelectValue } from "@radix-ui/react-select";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { ProfileImage } from "../molecules/profile-image";
 import { Button } from "../ui/button";
 import { Label } from "../ui/label";
 import { Loading } from "../ui/loading";
@@ -73,8 +73,8 @@ export function ProfessionalForm({ className }: { className?: string }) {
       )}
     >
       <div className="flex md:justify-between justify-center flex-col-reverse md:flex-row">
-        <div className="flex flex-col gap-2">
-          <div className="flex items-end gap-2 w-full md:w-fit">
+        <div className="flex flex-col gap-2 md:max-w-[600px]">
+          <div className="flex items-end gap-2 w-full">
             <div>
               <Label htmlFor="name" className="">
                 Nome
@@ -100,18 +100,18 @@ export function ProfessionalForm({ className }: { className?: string }) {
               </Select>
             </div>
 
-            <div className="flex flex-col gap-2 w-full md:w-fit">
+            <div className="flex flex-col gap-2 w-full">
               <Input
                 id="name"
                 value={userData?.name || ""}
                 disabled
-                className="w-full md:w-80"
+                className="w-full"
                 placeholder="Nome do usuário"
               />
             </div>
           </div>
 
-          <div className="flex items-end gap-2 w-full md:w-fit">
+          <div className="flex items-end gap-2 w-full">
             <div className="w-full">
               <Label htmlFor="profession" className="text-right">
                 Profissão
@@ -125,7 +125,6 @@ export function ProfessionalForm({ className }: { className?: string }) {
                     profession: e.target.value,
                   }))
                 }
-                className="md:w-80"
                 placeholder="Fisioterapeuta"
               />
             </div>
@@ -142,7 +141,6 @@ export function ProfessionalForm({ className }: { className?: string }) {
                     license: e.target.value,
                   }))
                 }
-                className="md:w-40"
                 placeholder="123456-F"
               />
             </div>
@@ -160,7 +158,7 @@ export function ProfessionalForm({ className }: { className?: string }) {
                   }))
                 }
               >
-                <SelectTrigger className="w-fit">
+                <SelectTrigger className="w-full">
                   <SelectValue className="col-span-3" placeholder="SP" />
                 </SelectTrigger>
                 <SelectContent>
@@ -174,7 +172,7 @@ export function ProfessionalForm({ className }: { className?: string }) {
             </div>
           </div>
 
-          <div className="flex items-end gap-2 w-full md:w-fit">
+          <div className="flex items-end gap-2 w-full">
             <div className="">
               <Label htmlFor="phone" className="text-right">
                 Telefone
@@ -206,7 +204,7 @@ export function ProfessionalForm({ className }: { className?: string }) {
                     email: e.target.value,
                   }))
                 }
-                className="w-full md:w-80"
+                className="w-full"
                 placeholder="email@profissional.com"
               />
             </div>
@@ -238,13 +236,7 @@ export function ProfessionalForm({ className }: { className?: string }) {
         </div>
 
         <div className="mx-auto md:mx-0">
-          <Avatar className="w-40 h-40">
-            <AvatarImage src={userData?.image || ""} />
-            <AvatarFallback>
-              {userData?.name?.split(" ")[0][0]}
-              {userData?.name?.split(" ")[1][0]}
-            </AvatarFallback>
-          </Avatar>
+          <ProfileImage className="w-40 h-40" editable />
         </div>
       </div>
     </div>
