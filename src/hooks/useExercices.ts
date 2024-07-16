@@ -1,21 +1,37 @@
-import { Exercise, Prisma } from "@prisma/client";
+import { Exercise, ExerciseCategoryEnum, Prisma } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { fisioFetcher } from "./Apis";
-export const useExercises = () => {
+export const useExercises = ({
+  search,
+  category,
+}: {
+  search?: string;
+  category?: ExerciseCategoryEnum;
+}) => {
   const {
     data: exercises,
     isLoading,
     refetch,
   } = useQuery({
-    queryKey: ["exercises"],
+    queryKey: ["exercises", search, category],
     queryFn: () => getExercises(),
     staleTime: 1000 * 60 * 10,
   });
 
   const getExercises = async (): Promise<Exercise[]> => {
+    const searchParams = new URLSearchParams();
+
+    if (search) {
+      searchParams.append("search", search);
+    }
+
+    if (category) {
+      searchParams.append("category", category);
+    }
+
     const response = await fisioFetcher({
-      url: "/exercises",
+      url: `/exercises?${searchParams.toString()}`,
       method: "GET",
     });
 
@@ -24,19 +40,6 @@ export const useExercises = () => {
     }
 
     return [];
-  };
-
-  const searchExercises = async (search: {
-    category?: string;
-    name?: string;
-  }) => {
-    const response = await fisioFetcher({
-      url: `/exercises?category=${search.category}&name=${search.name}`,
-      method: "GET",
-    });
-
-    if (!response) return;
-    return response;
   };
 
   const createExercise = async (
@@ -82,7 +85,6 @@ export const useExercises = () => {
     exercises,
     isLoading,
     getExercises,
-    searchExercises,
     createExercise,
     updateExercise,
     deleteExercise,

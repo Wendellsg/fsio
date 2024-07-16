@@ -18,7 +18,7 @@ import { format } from "date-fns";
 import { Pencil, Trash2 } from "lucide-react";
 
 export function ExercisesTable() {
-  const { exercises, isLoading, refetch, deleteExercise } = useExercises();
+  const { exercises, isLoading, refetch, deleteExercise } = useExercises({});
 
   return (
     <div className="mx-auto p-4 border rounded-md">

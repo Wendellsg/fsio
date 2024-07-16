@@ -1,4 +1,4 @@
-import { ExercisesTable } from "@/components/organisms/exercicies/table";
+import { ExercisesTable } from "@/components/organisms/exercises/table";
 
 export default function AdminPage() {
   return (
