@@ -12,13 +12,13 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useExercises } from "@/hooks";
+import { deleteExercise, useExercises } from "@/hooks";
 import { Exercise } from "@prisma/client";
 import { format } from "date-fns";
 import { Pencil, Trash2 } from "lucide-react";
 
 export function ExercisesTable() {
-  const { exercises, isLoading, refetch, deleteExercise } = useExercises({});
+  const { exercises, isLoading, refetch } = useExercises({});
 
   return (
     <div className="mx-auto p-4 border rounded-md">
@@ -63,7 +63,7 @@ export function ExercisesTable() {
 
                   <Button
                     variant={"ghost"}
-                    onClick={() => deleteExercise(exercise.id)}
+                    onClick={() => deleteExercise(exercise.id, refetch)}
                   >
                     <Trash2 className="w-4 h-4" />
                     <span className="sr-only">Excluir</span>

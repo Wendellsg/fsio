@@ -42,54 +42,53 @@ export const useExercises = ({
     return [];
   };
 
-  const createExercise = async (
-    exercise: Prisma.ExerciseUncheckedCreateInput
-  ) => {
-    await fisioFetcher({
-      url: "/exercises",
-      method: "POST",
-      data: exercise,
-      callback: () => {
-        getExercises();
-        toast.success("Exercício criado com sucesso!");
-      },
-    });
-  };
-
-  const updateExercise = async (
-    exercise: Prisma.ExerciseUncheckedUpdateInput
-  ) => {
-    await fisioFetcher({
-      url: `/exercises/${exercise.id}`,
-      method: "PATCH",
-      data: exercise,
-      callback: () => {
-        getExercises();
-        toast.success("Exercício criado com sucesso!");
-      },
-    });
-  };
-
-  const deleteExercise = async (id: string) => {
-    await fisioFetcher({
-      url: `/exercises/${id}`,
-      method: "DELETE",
-      callback: () => {
-        getExercises();
-        toast.success("Exercício excluído com sucesso!");
-      },
-    });
-  };
-
   return {
     exercises,
     isLoading,
     getExercises,
-    createExercise,
-    updateExercise,
-    deleteExercise,
     refetch,
   };
+};
+
+export const createExercise = async (
+  exercise: Prisma.ExerciseUncheckedCreateInput,
+  refetch: () => void
+) => {
+  await fisioFetcher({
+    url: "/exercises",
+    method: "POST",
+    data: exercise,
+    callback: () => {
+      refetch();
+      toast.success("Exercício criado com sucesso!");
+    },
+  });
+};
+
+export const updateExercise = async (
+  exercise: Prisma.ExerciseUncheckedUpdateInput,
+  refetch: () => void
+) => {
+  await fisioFetcher({
+    url: `/exercises/${exercise.id}`,
+    method: "PATCH",
+    data: exercise,
+    callback: () => {
+      refetch();
+      toast.success("Exercício criado com sucesso!");
+    },
+  });
+};
+
+export const deleteExercise = async (id: string, refetch: () => void) => {
+  await fisioFetcher({
+    url: `/exercises/${id}`,
+    method: "DELETE",
+    callback: () => {
+      refetch();
+      toast.success("Exercício excluído com sucesso!");
+    },
+  });
 };
 
 export const useExercise = (id: string) => {

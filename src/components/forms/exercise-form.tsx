@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useState } from "react";
-import { useExercises } from "../../hooks";
+import { createExercise, updateExercise } from "../../hooks";
 
 import { resolvePath } from "@/lib/cdn";
 import { translateExerciseCategory } from "@/types";
@@ -58,11 +58,7 @@ export const ExercisesForm = ({
   });
 
   const [content, setContent] = useState<ContentEnum>(ContentEnum.BASIC);
-
   const [submitting, setSubmitting] = useState<boolean>(false);
-
-  const { createExercise, updateExercise } = useExercises();
-
   async function handleSave() {
     setSubmitting(true);
 
@@ -74,12 +70,12 @@ export const ExercisesForm = ({
     };
 
     if (exercise.id) {
-      await updateExercise(payload);
+      await updateExercise(payload, onSubmit);
       setSubmitting(false);
       return;
     }
 
-    await createExercise(payload);
+    await createExercise(payload, onSubmit);
     setSubmitting(false);
 
     onSubmit();
