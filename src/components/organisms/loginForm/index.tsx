@@ -15,6 +15,8 @@ export function LoginForm() {
 
   if (isLoading) return <Loading size={50} />;
 
+  console.log(userData);
+
   if (userData?.id) {
     return <AlreadyLoggedCard />;
   }
@@ -32,6 +34,7 @@ export function LoginForm() {
           placeholder="E-mail"
           type="email"
           name="email"
+          autoComplete="email"
           register={register}
         />
 
@@ -47,6 +50,7 @@ export function LoginForm() {
           placeholder="Senha"
           type="password"
           name="password"
+          autoComplete="current-password"
           register={register}
         />
 

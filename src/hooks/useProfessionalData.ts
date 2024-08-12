@@ -10,18 +10,18 @@ export function useProfessionalData() {
     isLoading,
     refetch,
   } = useQuery({
-    queryFn: async (): Promise<Professional> => {
-      return await fisioFetcher({
+    queryFn: async () =>
+      await fisioFetcher<Professional>({
         url: "/professionals/me",
         method: "GET",
-      });
-    },
+      }),
+
     queryKey: ["professionalData"],
     staleTime: 1000 * 60 * 10,
   });
 
   return {
-    professionalData,
+    professionalData: professionalData as Professional,
     isLoading,
     refetch,
   };

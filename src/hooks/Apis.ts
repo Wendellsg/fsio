@@ -11,13 +11,14 @@ export const fisioApi = axios.create({
   },
 });
 
-export const fisioFetcher = async ({
+export async function fisioFetcher<T>({
   url,
   method,
   data,
   loadingFunction,
   callback,
   onError,
+  checkAuth,
 }: {
   url: string;
   method: "GET" | "POST" | "PATCH" | "DELETE";
@@ -25,7 +26,15 @@ export const fisioFetcher = async ({
   loadingFunction?: (value: boolean) => void;
   callback?: (data?: any) => void;
   onError?: (error: string) => void;
-}) => {
+  checkAuth?: boolean;
+}): Promise<T | undefined> {
+  if (
+    checkAuth &&
+    !window.localStorage.getItem(process.env.NEXT_PUBLIC_TOKEN_KEY as string)
+  ) {
+    return undefined;
+  }
+
   loadingFunction && loadingFunction(true);
   try {
     const response = await fisioApi({
@@ -39,17 +48,20 @@ export const fisioFetcher = async ({
       },
     });
     callback && callback(response.data);
-    return response.data;
+    console.log(response.data);
+    return response.data as T;
   } catch (error: AxiosError | any) {
     if (!error.response) {
       toast.error("Erro ao se conectar com o servidor");
-      return;
+      return undefined;
     }
 
     if (onError) {
       onError(error.response?.data.message);
     }
   } finally {
+    //ATENÇÃO: Nunca retorne nada aqui por que o retorno do finally sobrescreve o retorno do try e do catch
+
     loadingFunction && loadingFunction(false);
   }
-};
+}

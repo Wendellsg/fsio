@@ -56,7 +56,7 @@ export function RouteGuardProvider({
     }
   }, [userData, pathName]);
 
-  if (isLoading) {
+  if (isLoading || !userData) {
     return (
       <div className="w-screen h-screen flex items-center justify-center">
         <Loading />

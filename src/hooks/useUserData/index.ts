@@ -11,13 +11,15 @@ export const useUserData = () => {
     data: userData,
     isLoading,
     refetch,
+    isError,
   } = useQuery({
-    queryFn: async (): Promise<Partial<User>> => {
-      return await fisioFetcher({
+    queryFn: async () =>
+      await fisioFetcher<Partial<User>>({
         url: "/auth/me",
         method: "GET",
-      });
-    },
+        checkAuth: true,
+      }),
+
     queryKey: ["userData"],
     staleTime: 1000 * 60 * 10,
   });
@@ -62,7 +64,7 @@ export const useUserData = () => {
 
   return {
     userData,
-    isLoading,
+    isLoading: isLoading && !isError,
     refetch,
     updateUserProfileData,
     addFavoriteExercise,
