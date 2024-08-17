@@ -14,8 +14,8 @@ export const useEvolutions = () => {
     staleTime: 1000 * 60 * 10,
   });
 
-  const getEvolution = async (): Promise<Evolution[]> => {
-    return await fisioFetcher({
+  const getEvolution = async () => {
+    return await fisioFetcher<Evolution[]>({
       url: `/evolutions/doctor`,
       method: "GET",
     });

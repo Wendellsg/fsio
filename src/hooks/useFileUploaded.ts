@@ -14,8 +14,8 @@ export function useFileUploaded() {
     refetch,
   } = useQuery({
     queryKey: ["files"],
-    queryFn: async (): Promise<FileUploaded[]> => {
-      return await fisioFetcher({
+    queryFn: async () => {
+      return await fisioFetcher<FileUploaded[]>({
         url: "/uploads",
         method: "GET",
       });
@@ -43,7 +43,10 @@ export function useFileUploaded() {
 
     formData.append("file", file);
 
-    const { key, url } = await fisioFetcher({
+    const data = await fisioFetcher<{
+      key: string;
+      url: string;
+    }>({
       url: `/uploads/upload-url?extension=${correctExtension}`,
       method: "GET",
       onError: (message: string) => {
@@ -51,7 +54,7 @@ export function useFileUploaded() {
       },
     });
 
-    if (!url) {
+    if (!data?.url) {
       toast.error("Erro ao criar url de upload");
       setProgress(0);
       return false;
@@ -68,10 +71,10 @@ export function useFileUploaded() {
     };
 
     try {
-      await axios.put(url, fileData, options);
+      await axios.put(data.url, fileData, options);
 
       const newFile: Partial<FileUploaded> = {
-        key: key,
+        key: data.key,
         size: file.size,
         extension: correctExtension,
         name: file.name,

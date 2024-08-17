@@ -14,8 +14,8 @@ export type ProfessionalDashBoardDto = {
 
 export function HomeDashboardBadges() {
   const { data: professionalDashboardData } = useQuery({
-    queryFn: async (): Promise<ProfessionalDashBoardDto> => {
-      return await fisioFetcher({
+    queryFn: async () => {
+      return await fisioFetcher<ProfessionalDashBoardDto>({
         url: "/analytics/professional-dashboard",
         method: "GET",
       });

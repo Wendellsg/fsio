@@ -12,8 +12,8 @@ export function useUsers() {
   } = useQuery({
     queryKey: ["users"],
 
-    queryFn: (): Promise<User[]> =>
-      fisioFetcher({
+    queryFn: () =>
+      fisioFetcher<User[]>({
         url: "/users",
         method: "GET",
       }),

@@ -2,8 +2,8 @@ import { RequestWithUser } from "@/types";
 import { useQuery } from "@tanstack/react-query";
 import { fisioFetcher } from "./Apis";
 
-export function getProfessionalRequests(): Promise<RequestWithUser[]> {
-  return fisioFetcher({
+export function getProfessionalRequests() {
+  return fisioFetcher<RequestWithUser[]>({
     url: "/requests/professional",
     method: "GET",
   });

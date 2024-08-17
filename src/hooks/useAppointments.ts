@@ -22,8 +22,8 @@ export const useAppointments = () => {
     enabled: !!userData && !!date,
   });
 
-  const getAppointment = async (): Promise<AppointmentGetPayload[]> => {
-    return await fisioFetcher({
+  const getAppointment = async () => {
+    return await fisioFetcher<AppointmentGetPayload[]>({
       url: "/appointments/professional" + `?date=${format(date, "yyyy-MM-dd")}`,
       method: "GET",
     });
@@ -86,8 +86,8 @@ export function useAppointmentComments(appointmentId: string) {
     enabled: !!appointmentId,
   });
 
-  const getComments = async (id: string): Promise<AppointmentComment[]> => {
-    return await fisioFetcher({
+  const getComments = async (id: string) => {
+    return await fisioFetcher<AppointmentComment[]>({
       url: `/appointments/${id}/comments`,
       method: "GET",
     });

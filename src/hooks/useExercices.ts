@@ -19,7 +19,7 @@ export const useExercises = ({
     staleTime: 1000 * 60 * 10,
   });
 
-  const getExercises = async (): Promise<Exercise[]> => {
+  const getExercises = async () => {
     const searchParams = new URLSearchParams();
 
     if (search) {
@@ -30,7 +30,7 @@ export const useExercises = ({
       searchParams.append("category", category);
     }
 
-    const response = await fisioFetcher({
+    const response = await fisioFetcher<Exercise[]>({
       url: `/exercises?${searchParams.toString()}`,
       method: "GET",
     });
@@ -99,8 +99,8 @@ export const useExercise = (id: string) => {
     enabled: !!id,
   });
 
-  const getExercise = async (id: string): Promise<Exercise> => {
-    const response = await fisioFetcher({
+  const getExercise = async (id: string) => {
+    const response = await fisioFetcher<Exercise>({
       url: `/exercises/${id}`,
       method: "GET",
     });

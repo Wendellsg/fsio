@@ -59,8 +59,8 @@ export const removePatient = async (patientId: string) => {
   });
 };
 
-const getPatients = async (): Promise<GetPatientResponseDTO> => {
-  return await fisioFetcher({
+const getPatients = async () => {
+  return await fisioFetcher<GetPatientResponseDTO>({
     url: `/patients`,
     method: "GET",
   });

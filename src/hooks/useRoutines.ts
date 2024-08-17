@@ -57,8 +57,8 @@ export const usePatientRoutines = () => {
     queryFn: () => getPatientRoutines(),
   });
 
-  const getPatientRoutines = async (): Promise<Routine[]> => {
-    return await fisioFetcher({
+  const getPatientRoutines = async () => {
+    return await fisioFetcher<Routine[]>({
       url: `/users/routines`,
       method: "GET",
     });
