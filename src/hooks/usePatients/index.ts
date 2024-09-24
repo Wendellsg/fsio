@@ -1,15 +1,31 @@
-import { User } from "@prisma/client";
+import type { Activity, User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { fisioFetcher } from "../Apis";
 
-export type GetPatientResponseDTO = Array<{
+export type GetPatientsResponseDTO = Array<{
   id: string;
   name: string;
   image: string;
   email: string;
 }>;
+
+export type GetPatientResponseDTO = {
+  id: string;
+  name: string;
+  email: string;
+  image: string;
+  height: number;
+  professionals: Array<{ id: string }>;
+  routines: Array<{
+    id: string;
+    professional: {
+      id: string;
+    };
+    activities: Activity[];
+  }>;
+};
 
 export const searchPatient = async (email: string) => {
   const response = await fisioFetcher({
@@ -26,7 +42,7 @@ export const searchPatient = async (email: string) => {
 
 export const addPatient = async (patientId: string) => {
   return await fisioFetcher({
-    url: `/requests`,
+    url: "/requests",
     method: "POST",
     data: { patientId },
     callback: () => {
@@ -40,11 +56,14 @@ export const createPatient = async (patient: {
   email: string;
 }) => {
   return await fisioFetcher({
-    url: `/patients`,
+    url: "/patients",
     method: "POST",
     data: patient,
     callback: () => {
       toast.success("Paciente criado com sucesso");
+    },
+    onError: (error) => {
+      toast.warning(error);
     },
   });
 };
@@ -60,8 +79,8 @@ export const removePatient = async (patientId: string) => {
 };
 
 const getPatients = async () => {
-  return await fisioFetcher<GetPatientResponseDTO>({
-    url: `/patients`,
+  return await fisioFetcher<GetPatientsResponseDTO>({
+    url: "/patients",
     method: "GET",
   });
 };
@@ -111,18 +130,15 @@ export const usePatients = () => {
     isLoading,
     setSearchInput,
     searchInput,
-    patients: patients || ([] as GetPatientResponseDTO),
+    patients: patients ?? [],
   };
 };
 
 const getPatientData = async (patientId: string) => {
-  const response = await fisioFetcher({
+  return await fisioFetcher<GetPatientResponseDTO>({
     url: `/users/patients/${patientId}`,
     method: "GET",
   });
-
-  if (!response) return false;
-  return response;
 };
 
 export function usePatient(id: string) {
@@ -130,7 +146,6 @@ export function usePatient(id: string) {
     queryKey: ["patientData", id as string],
     queryFn: () => getPatientData(id as string),
     staleTime: 1000 * 60 * 10,
-    enabled: !!id && id !== "undefined" && id !== "",
   });
 
   return { patientData, refetch };

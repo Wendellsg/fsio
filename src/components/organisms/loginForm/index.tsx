@@ -15,8 +15,6 @@ export function LoginForm() {
 
   if (isLoading) return <Loading size={50} />;
 
-  console.log(userData);
-
   if (userData?.id) {
     return <AlreadyLoggedCard />;
   }

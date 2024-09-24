@@ -1,5 +1,5 @@
 import { Exercises } from "@/components/organisms/exercises";
-import { ExerciseCategoryEnum } from "@prisma/client";
+import type { ExerciseCategoryEnum } from "@prisma/client";
 
 export default function ExercisesPage({
   searchParams,

@@ -1,4 +1,4 @@
-import { Exercise, ExerciseCategoryEnum, Prisma } from "@prisma/client";
+import type { Exercise, ExerciseCategoryEnum, Prisma } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { fisioFetcher } from "./Apis";
@@ -62,6 +62,9 @@ export const createExercise = async (
       refetch();
       toast.success("Exercício criado com sucesso!");
     },
+    onError: (error) => {
+      toast.error(error);
+    },
   });
 };
 
@@ -95,7 +98,7 @@ export const useExercise = (id: string) => {
   const { data: exercise, isLoading } = useQuery({
     queryFn: () => getExercise(id),
     queryKey: ["exercise", `${id}`],
-    staleTime: Infinity,
+    staleTime: Number.POSITIVE_INFINITY,
     enabled: !!id,
   });
 

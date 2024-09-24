@@ -5,7 +5,7 @@ import { fisioFetcher } from "@/hooks/Apis";
 import { useProfessionalData } from "@/hooks/useProfessionalData";
 import { useUserData } from "@/hooks/useUserData";
 import { cn } from "@/lib/utils";
-import { Professional, ProfessionalTitleEnum } from "@prisma/client";
+import { type Professional, ProfessionalTitleEnum } from "@prisma/client";
 import { SelectValue } from "@radix-ui/react-select";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
@@ -45,7 +45,7 @@ export function ProfessionalForm({ className }: { className?: string }) {
       });
     } else {
       fisioFetcher({
-        url: `/professionals`,
+        url: "/professionals",
         method: "POST",
         data: editingProfessional,
         callback: () => {

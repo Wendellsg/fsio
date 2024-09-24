@@ -42,7 +42,7 @@ export function PatientList() {
               index={index}
               image={patient.image || ""}
               name={`${patient.name}`}
-              url={`/pacientes/${patient.id}`}
+              url={`/profissional/pacientes/${patient.id}`}
               id={patient.id || ""}
             />
           );

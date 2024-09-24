@@ -2,7 +2,8 @@
 import { Button } from "@/components/ui/button";
 import { Skeleton } from "@/components/ui/skeleton";
 import { resolvePath } from "@/lib/cdn";
-import { Exercise } from "@prisma/client";
+import type { Exercise } from "@prisma/client";
+import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { AiFillHeart } from "react-icons/ai";
 import { IoIosAddCircle, IoIosRemoveCircle } from "react-icons/io";
@@ -24,6 +25,8 @@ export const ExerciseCard: React.FC<{
   removeAction,
 }) => {
   const router = useRouter();
+
+  const Slot = url ? Link : "div";
 
   return (
     <div
@@ -57,7 +60,7 @@ export const ExerciseCard: React.FC<{
           <Button
             variant={"link"}
             onClick={() => {
-              addAction && addAction(exercise?.id);
+              addAction?.(exercise?.id);
             }}
             className="p-0"
           >
@@ -71,7 +74,7 @@ export const ExerciseCard: React.FC<{
           <Button
             variant={"link"}
             onClick={() => {
-              removeAction && removeAction(exercise?.id);
+              removeAction?.(exercise?.id);
             }}
             className="p-0"
           >
@@ -79,22 +82,19 @@ export const ExerciseCard: React.FC<{
           </Button>
         )}
       </div>
-      <div
-        className="group p-4 ease-out duration-300 flex flex-col justify-center items-start w-full h-fit  pb-4  bg-gradient-to-t rounded-lg overflow-hidden cursor-pointer from-white hover:from-60% to-transparent "
-        onClick={() => {
-          if (!url) return;
-          router.push(url);
-        }}
+      <Slot
+        href={url || ""}
+        className="group p-4 ease-out duration-300 transition-transform flex flex-col justify-center items-start w-full h-fit  pb-4  bg-gradient-to-t rounded-lg overflow-hidden cursor-pointer from-white hover:from-60% to-transparent "
       >
         <p className="text-lg  font-bold text-white drop-shadow-md mb-4">
           {exercise?.name}
         </p>
-        <p className="max-h-0 group-hover:max-h-fit overflow-hidden text-sm font-bold">
+        <p className="hidden group-hover:block overflow-hidden text-sm font-bold">
           {exercise?.summary.length > 250
-            ? exercise?.summary.slice(0, 250) + "..."
+            ? `${exercise?.summary.slice(0, 250)}...`
             : exercise?.summary}
         </p>
-      </div>
+      </Slot>
     </div>
   );
 };

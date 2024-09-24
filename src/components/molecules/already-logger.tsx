@@ -1,4 +1,3 @@
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { fisioFetcher } from "@/hooks/Apis";
 import { useAuth } from "@/hooks/useAuth";
@@ -9,6 +8,7 @@ import { AlertTriangle } from "lucide-react";
 
 import Link from "next/link";
 import { toast } from "sonner";
+import { ProfileImage } from "./profile-image";
 
 const pathByRole = {
   [UserRoleEnum.admin]: "/admin",
@@ -35,13 +35,7 @@ export const AlreadyLoggedCard = () => {
   const { logout } = useAuth();
   return (
     <div className="flex flex-col items-center justify-center gap-4 rounded-xl bg-white p-8 shadow-10px">
-      <Avatar className="w-40 h-40">
-        <AvatarImage src={userData?.image || ""} />
-        <AvatarFallback>
-          {userData?.name?.split(" ")[0][0]}
-          {userData?.name?.split(" ")[1][0]}
-        </AvatarFallback>
-      </Avatar>
+      <ProfileImage className="w-40 h-40" />
       <p className="mt-4">Você está logado(a) como</p>
       <p className="text-lg font-bold">{userData?.name}</p>
 

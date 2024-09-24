@@ -6,12 +6,13 @@ import { createExercise, updateExercise } from "../../hooks";
 import { resolvePath } from "@/lib/cdn";
 import { translateExerciseCategory } from "@/types";
 import {
-  Exercise,
+  type Exercise,
   ExerciseCategoryEnum,
   FileTypeEnum,
-  Prisma,
+  type Prisma,
 } from "@prisma/client";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { toast } from "sonner";
 import { UploadCard } from "../organisms/uploadCard";
 import { Button } from "../ui/button";
 import {
@@ -61,6 +62,19 @@ export const ExercisesForm = ({
   const [submitting, setSubmitting] = useState<boolean>(false);
   async function handleSave() {
     setSubmitting(true);
+
+    if (
+      !newExercise.name ||
+      !newExercise.category ||
+      !newExercise.description ||
+      !newExercise.summary ||
+      !newExercise.image ||
+      !newExercise.video
+    ) {
+      toast.error("Preencha todos os campos");
+      setSubmitting(false);
+      return;
+    }
 
     const payload: Prisma.ExerciseUncheckedCreateInput = {
       ...exercise,
@@ -122,7 +136,7 @@ export const ExercisesForm = ({
               Categoria
             </Label>
             <Select
-              value={newExercise.category!}
+              value={newExercise.category}
               onValueChange={(value: ExerciseCategoryEnum) => {
                 setNewExercise({
                   ...newExercise,
@@ -186,8 +200,13 @@ export const ExercisesForm = ({
                 }}
                 id="image"
                 src={resolvePath(newExercise.image as string)}
-                alt="image"
-                className="w-full h-full object-cover rounded-md cursor-pointer  transition-transform duration-300 ease-in-out"
+                alt="Exercise illustration"
+                onKeyUp={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    setContent(ContentEnum.IMAGE);
+                  }
+                }}
+                className="w-full h-full object-cover rounded-md cursor-pointer transition-transform duration-300 ease-in-out"
               />
             </div>
 
@@ -200,15 +219,27 @@ export const ExercisesForm = ({
                 onClick={() => {
                   setContent(ContentEnum.VIDEO);
                 }}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter" || e.key === " ") {
+                    setContent(ContentEnum.VIDEO);
+                  }
+                }}
                 poster={
-                  !!newExercise.video
+                  newExercise.video
                     ? ""
                     : "https://blog.iprocess.com.br/wp-content/uploads/2021/11/placeholder.png"
                 }
                 controls={!!newExercise.video}
                 src={resolvePath(newExercise.video as string)}
                 className="w-full h-full max-h-[70dvh]  object-cover rounded-md cursor-pointer transition-transform duration-300 ease-in-out"
-              />
+              >
+                <track
+                  kind="captions"
+                  srcLang="en"
+                  src="path/to/captions.vtt"
+                  label="English captions"
+                />
+              </video>
             </div>
           </>
         )}

@@ -5,7 +5,7 @@ import {
   ExerciseCardSkeleton,
 } from "@/components/organisms/exercises/card";
 import { useExercises } from "@/hooks";
-import { ExerciseCategoryEnum } from "@prisma/client";
+import type { ExerciseCategoryEnum } from "@prisma/client";
 import { ExercisesFilters } from "./filters";
 
 export function Exercises({
@@ -35,7 +35,9 @@ export function Exercises({
       <div className="justify-items-center w-full grid grid-cols-[1fr] sm:grid-cols-[repeat(auto-fill,_256px)] gap-4 py-4">
         {isLoading &&
           Array.from({ length: 6 }).map((_, index) => (
-            <ExerciseCardSkeleton key={index + "exercise-card-skeleton"} />
+            <ExerciseCardSkeleton
+              key={`${`${index}`}-exercise-card-skeleton`}
+            />
           ))}
 
         {exercises?.map((exercise) => {

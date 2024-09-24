@@ -1,9 +1,5 @@
-/* "use client";
+"use client";
 
-import RoutineCard from "@/components/RoutineCard";
-import { RoutineForm } from "@/components/RoutineForm";
-import { InfoItem } from "@/components/molecules/infoItem";
-import { Modals } from "@/components/molecules/modals";
 import {
   Accordion,
   AccordionContent,
@@ -12,18 +8,11 @@ import {
 } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { fisioFetcher } from "@/hooks/Apis";
-import { usePatient, usePatients } from "@/hooks/usePatients";
-import { Routine } from "@/types";
-import { findAge } from "@/utils/date";
+import { removePatient, usePatient } from "@/hooks/usePatients";
 import Link from "next/link";
 import { useState } from "react";
 import { BsPlus } from "react-icons/bs";
-import { FaEnvelope, FaRulerVertical, FaWeight } from "react-icons/fa";
-import { HiCake } from "react-icons/hi";
-import { IoLogoWhatsapp } from "react-icons/io";
-import { RiEditBoxFill, RiMapPin2Fill } from "react-icons/ri";
-import { toast } from "sonner"; */
+import { RiEditBoxFill } from "react-icons/ri";
 
 export default function PacientePage({
   params,
@@ -33,23 +22,22 @@ export default function PacientePage({
   };
 }) {
   const { id } = params;
-  /* 
+
   const { patientData, refetch } = usePatient(id as string);
-  const { removePatient } = usePatients();
 
   const [newRoutineModalOpen, setNewRoutineModalOpen] =
     useState<boolean>(false);
- */
+
   return (
     <>
-      {/*   <Modals
+      {/* <Modals
         isOpen={newRoutineModalOpen}
         onClose={() => setNewRoutineModalOpen(false)}
         title="Nova Rotina"
       >
         <RoutineForm
           routine={{} as Routine}
-          onSubmit={async (NewRoutine) => {
+          onSubmit={async (NewRoutine: Prisma.RoutineCreateInput) => {
             await fisioFetcher({
               url: `/users/${id}/routines`,
               method: "POST",
@@ -62,7 +50,7 @@ export default function PacientePage({
             });
           }}
         />
-      </Modals>
+      </Modals> */}
 
       <div className="flex flex-col items-start justify-start w-full h-full gap-4 p-4">
         <div className="flex flex-col gap-4 w-full">
@@ -83,7 +71,7 @@ export default function PacientePage({
                   <BsPlus className="text-2xl font-bold" />
                 </Button>
               </div>
-              <div className="flex items-center justify-start flex-wrap w-full gap-4 p-4">
+              {/* <div className="flex items-center justify-start flex-wrap w-full gap-4 p-4">
                 {patientData?.routines?.map((routine: Routine) => {
                   return (
                     <RoutineCard
@@ -93,7 +81,7 @@ export default function PacientePage({
                     />
                   );
                 })}
-              </div>
+              </div> */}
             </div>
           </div>
           <div className="flex flex-col md:min-w-[300px] gap-4 justify-start items-center min-h-fit md:w-fit">
@@ -115,7 +103,7 @@ export default function PacientePage({
                 <AccordionTrigger>Ver Detalhes</AccordionTrigger>
                 <AccordionContent>
                   <div className="w-full flex flex-col gap-4">
-                    <InfoItem
+                    {/* <InfoItem
                       icon={<HiCake size={30} />}
                       text={
                         patientData?.birthDate
@@ -152,17 +140,10 @@ export default function PacientePage({
                       <InfoItem
                         icon={<RiMapPin2Fill size={30} />}
                         iconSize="30px"
-                        text={
-                          patientData?.address +
-                          ", " +
-                          patientData?.addressNumber +
-                          ", " +
-                          patientData?.addressCity +
-                          " - " +
-                          patientData?.addressState
-                        }
+                        text={`${patientData?.address}, ${patientData?.addressNumber}, ${patientData?.addressCity} - ${patientData?.addressState}`}
                       />
                     )}
+                  */}
                   </div>
                 </AccordionContent>
               </AccordionItem>
@@ -186,7 +167,7 @@ export default function PacientePage({
             </Button>
           </div>
         </div>
-      </div> */}
+      </div>
     </>
   );
 }

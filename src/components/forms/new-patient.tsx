@@ -13,7 +13,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { addPatient, createPatient, searchPatient } from "@/hooks/usePatients";
 import { queryClient } from "@/providers";
-import { User } from "@prisma/client";
+import type { User } from "@prisma/client";
 import { Plus } from "lucide-react";
 import { useState } from "react";
 import { BsSearch } from "react-icons/bs";
@@ -180,49 +180,47 @@ export const NewPatientModal: React.FC<{
         )}
 
         {createMode && (
-          <>
-            <DialogFooter className="flex gap-4 w-full justify-center items-center mt-8 px-8">
-              <DialogClose asChild>
-                <Button
-                  variant="destructive"
-                  onClick={() => {
-                    setCreateMode(false);
-                  }}
-                  className="w-full"
-                >
-                  Cancelar
-                </Button>
-              </DialogClose>
+          <DialogFooter className="flex gap-4 w-full justify-center items-center mt-8 px-8">
+            <DialogClose asChild>
               <Button
-                disabled={creatingPatient}
-                type="submit"
-                className="w-full"
-                onClick={async () => {
-                  if (!newPatient.name) {
-                    setErrors({ ...errors, name: "Campo obrigatório" });
-                    return;
-                  }
-                  if (!newPatient.email) {
-                    setErrors({ ...errors, email: "Campo obrigatório" });
-                    return;
-                  }
-
-                  setCreatingPatient(true);
-                  const result = await createPatient(newPatient);
-
-                  if (result) {
-                    setCreateMode(false);
-                    refetch();
-                  }
-
-                  setErrors({});
-                  setCreatingPatient(false);
+                variant="destructive"
+                onClick={() => {
+                  setCreateMode(false);
                 }}
+                className="w-full"
               >
-                Criar
+                Cancelar
               </Button>
-            </DialogFooter>
-          </>
+            </DialogClose>
+            <Button
+              disabled={creatingPatient}
+              type="submit"
+              className="w-full"
+              onClick={async () => {
+                if (!newPatient.name) {
+                  setErrors({ ...errors, name: "Campo obrigatório" });
+                  return;
+                }
+                if (!newPatient.email) {
+                  setErrors({ ...errors, email: "Campo obrigatório" });
+                  return;
+                }
+
+                setCreatingPatient(true);
+                const result = await createPatient(newPatient);
+
+                if (result) {
+                  setCreateMode(false);
+                  refetch();
+                }
+
+                setErrors({});
+                setCreatingPatient(false);
+              }}
+            >
+              Criar
+            </Button>
+          </DialogFooter>
         )}
       </DialogContent>
     </Dialog>
