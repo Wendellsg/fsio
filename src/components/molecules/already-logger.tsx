@@ -39,12 +39,12 @@ export const AlreadyLoggedCard = () => {
       <p className="mt-4">Você está logado(a) como</p>
       <p className="text-lg font-bold">{userData?.name}</p>
 
-      <div className="flex flex-col my-8 gap-4 justify-center items-center">
+      <div className="flex flex-col my-8 justify-center items-center">
         {userData?.accountVerifiedAt ? (
           <>
-            <p className="text-xs w-full text-center">Continuar como</p>
+            <p className="text-xs w-full text-center mb-4">Continuar como</p>
             {userData?.roles?.map((role: UserRoleEnum) => (
-              <Button className="w-36" type="submit" key={role}>
+              <Button className="w-36 mb-2" type="submit" key={role}>
                 <Link
                   href={pathByRole[role] || "/"}
                   passHref
@@ -57,15 +57,19 @@ export const AlreadyLoggedCard = () => {
           </>
         ) : (
           <>
-            <AlertTriangle />
-            <p className="text-xs w-full text-center ">
+            <AlertTriangle className="text-secondary" size={50} />
+            <p className="text-xs w-full text-center font-semibold mt-4">
               Sua conta ainda não foi verificada
             </p>
 
+            <p className="text-xs w-full text-center ">
+              Verifique seu email para continuar
+            </p>
+
             <Button
-              variant={"secondary"}
+              variant={"ghost"}
               type="button"
-              className="w-fit"
+              className="w-fit my-4"
               onClick={resendVerificationEmail}
             >
               Reenviar email de verificação
@@ -76,7 +80,7 @@ export const AlreadyLoggedCard = () => {
         <Button
           variant={"outline"}
           type="button"
-          className="w-36"
+          className="w-36 mt-4"
           onClick={logout}
         >
           Sair

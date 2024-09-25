@@ -9,6 +9,9 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { removePatient, usePatient } from "@/hooks/usePatients";
+import { getFullAddress } from "@/lib/address";
+import { findAge } from "@/lib/date";
+import { Cake, Mail, Phone, Pin, Ruler, Weight } from "lucide-react";
 import Link from "next/link";
 import { useState } from "react";
 import { BsPlus } from "react-icons/bs";
@@ -92,7 +95,7 @@ export default function PacientePage({
                 {patientData?.name?.split(" ")[1][0]}
               </AvatarFallback>
             </Avatar>
-            <Button type="submit">
+            <Button type="button">
               Editar Paciente <RiEditBoxFill size={20} />
             </Button>
 
@@ -103,34 +106,52 @@ export default function PacientePage({
                 <AccordionTrigger>Ver Detalhes</AccordionTrigger>
                 <AccordionContent>
                   <div className="w-full flex flex-col gap-4">
-                    {/* <InfoItem
-                      icon={<HiCake size={30} />}
-                      text={
-                        patientData?.birthDate
-                          ? findAge(patientData?.birthDate) + " anos"
-                          : "Sem idade"
-                      }
-                    />
-                    <InfoItem
-                      icon={<FaRulerVertical size={30} />}
-                      text={
-                        patientData?.height
-                          ? patientData?.height?.toString() + " cm"
-                          : "Sem altura"
-                      }
-                    />
-                    <InfoItem
-                      icon={<FaWeight size={30} />}
-                      text={
-                        patientData?.weight
-                          ? patientData?.weight?.toString() + " Kg"
-                          : "Sem peso"
-                      }
-                    />
-                    <InfoItem
-                      icon={<IoLogoWhatsapp size={30} />}
-                      text={patientData?.phone || "Sem telefone"}
-                    />
+                    <div className="flex items-center">
+                      <Cake size={25} />
+                      <span className="ml-2 font-semibold">
+                        {findAge(patientData?.birthDate?.toDateString()) ??
+                          "Sem idade"}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center">
+                      <Ruler size={25} />
+                      <span className="ml-2 font-semibold">
+                        {patientData?.height?.toString() ?? "Sem altura"}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center">
+                      <Weight size={25} />
+                      <span className="ml-2 font-semibold">
+                        {patientData?.weight?.toString() ?? "Sem peso"}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center">
+                      <Phone size={25} />
+                      <span className="ml-2 font-semibold">
+                        {patientData?.phone ?? "Sem telefone"}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center">
+                      <Mail size={25} />
+                      <span className="ml-2 font-semibold">
+                        {patientData?.email ?? "Sem email"}
+                      </span>
+                    </div>
+
+                    <div className="flex items-center">
+                      <Pin size={25} />
+                      <span className="ml-2 font-semibold">
+                        {getFullAddress(patientData?.address) ?? "Sem endereço"}
+                      </span>
+                    </div>
+
+                    {/* 
+                
+              
                     <InfoItem
                       icon={<FaEnvelope size={30} />}
                       text={patientData?.email}

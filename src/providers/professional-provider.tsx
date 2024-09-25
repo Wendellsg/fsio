@@ -23,7 +23,7 @@ export function ProfessionalProvider({
       </div>
     );
 
-  if (!professionalData) {
+  if (!professionalData || professionalData.license === "DEFAULT") {
     return <EndProfessionalRegister />;
   }
 

@@ -1,4 +1,4 @@
-import NavMenu, { MenuItem } from "@/components/organisms/navigation";
+import NavMenu, { type MenuItem } from "@/components/organisms/navigation";
 import { AppContainer, PageContent } from "@/components/ui/layouts";
 import { ProfessionalProvider } from "@/providers/professional-provider";
 import {

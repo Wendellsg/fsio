@@ -1,4 +1,4 @@
-import type { Activity, User } from "@prisma/client";
+import type { Activity, Address, User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -16,8 +16,12 @@ export type GetPatientResponseDTO = {
   name: string;
   email: string;
   image: string;
+  birthDate: Date;
+  weight: number;
+  phone: string;
   height: number;
   professionals: Array<{ id: string }>;
+  address: Address;
   routines: Array<{
     id: string;
     professional: {
@@ -90,7 +94,7 @@ export const updatePatient = async (
   diagnosis: string
 ) => {
   const response = await fisioFetcher({
-    url: `/users/${patient.id}`,
+    url: `/patients/${patient.id}`,
     method: "PATCH",
     data: { patient, diagnosis },
     callback: () => {
@@ -136,7 +140,7 @@ export const usePatients = () => {
 
 const getPatientData = async (patientId: string) => {
   return await fisioFetcher<GetPatientResponseDTO>({
-    url: `/users/patients/${patientId}`,
+    url: `/patients/${patientId}`,
     method: "GET",
   });
 };

@@ -3,7 +3,7 @@ import Calendar from "@/components/organisms/calendar";
 import { DailySchedule } from "@/components/organisms/dailySchedule";
 import { Button } from "@/components/ui/button";
 import { DateProvider } from "@/contexts/date-context";
-import { AppointmentGetPayload } from "@/types";
+import type { AppointmentGetPayload } from "@/types";
 import { startOfToday } from "date-fns";
 
 export default async function SchedulePage({

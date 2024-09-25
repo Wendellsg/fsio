@@ -134,7 +134,12 @@ export function ProfessionalForm({ className }: { className?: string }) {
               </Label>
               <Input
                 id="license"
-                value={editingProfessional?.license || ""}
+                value={
+                  editingProfessional?.license === "DEFAULT" ||
+                  !editingProfessional?.license
+                    ? ""
+                    : editingProfessional?.license
+                }
                 onChange={(e) =>
                   setEditingProfessional((prev) => ({
                     ...prev!,
@@ -150,7 +155,7 @@ export function ProfessionalForm({ className }: { className?: string }) {
                 Estado de Registro
               </Label>
               <Select
-                value={editingProfessional?.licenseState}
+                value={editingProfessional?.licenseState || "SP"}
                 onValueChange={(v) =>
                   setEditingProfessional((prev) => ({
                     ...prev!,
