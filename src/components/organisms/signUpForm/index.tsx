@@ -4,7 +4,7 @@ import { Input, InputBox, InputError } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loading } from "@/components/ui/loading";
 import { Switch } from "@/components/ui/switch";
-import { SignUpData, signUpDataSchema } from "@/lib/zod-schemas";
+import { type SignUpData, signUpDataSchema } from "@/lib/zod-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
 import Link from "next/link";
@@ -76,9 +76,8 @@ export function SignUpForm() {
         <Input
           placeholder="Seu nome"
           type="text"
-          name="name"
           id="name"
-          register={register}
+          {...register("name")}
         />
 
         {errors?.email?.message && (
@@ -92,9 +91,8 @@ export function SignUpForm() {
         <Input
           placeholder="E-mail"
           type="email"
-          name="email"
           id="email"
-          register={register}
+          {...register("email")}
         />
 
         {errors?.email?.message && (
@@ -108,9 +106,8 @@ export function SignUpForm() {
         <Input
           placeholder="Senha"
           type="password"
-          name="password"
           id="password"
-          register={register}
+          {...register("password")}
         />
 
         {errors?.password?.message && (
@@ -124,8 +121,7 @@ export function SignUpForm() {
         <Input
           type="password"
           placeholder="Senha"
-          name="passwordConfirmation"
-          register={register}
+          {...register("passwordConfirmation")}
           id="password-confirmation"
         />
 

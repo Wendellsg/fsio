@@ -1,4 +1,4 @@
-import { Activity } from "@prisma/client";
+import type { Activity } from "@prisma/client";
 import { toast } from "sonner";
 import { fisioFetcher } from "./Apis";
 
@@ -11,7 +11,7 @@ export const useActivities = () => {
     >
   ) => {
     return await fisioFetcher({
-      url: `/users/routines/${activity.routine?.id}/activities`,
+      url: "/activities",
       method: "POST",
       data: activity,
       callback: () => {

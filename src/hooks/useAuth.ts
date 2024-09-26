@@ -10,11 +10,19 @@ import { toast } from "sonner";
 import { z } from "zod";
 
 const createLoginSchema = z.object({
-  email: z.string().email("Formato de email inválido"),
-  password: z.string().min(6, "Senha deve ter no mínimo 6 caracteres"),
+  email: z
+    .string({
+      required_error: "Email é obrigatório",
+    })
+    .email("Formato de email inválido"),
+  password: z
+    .string({
+      required_error: "Senha é obrigatória",
+    })
+    .min(6, "Senha deve ter no mínimo 6 caracteres"),
 });
 
-type LoginData = z.infer<typeof createLoginSchema>;
+export type LoginData = z.infer<typeof createLoginSchema>;
 
 export const useAuth = () => {
   const router = useRouter();

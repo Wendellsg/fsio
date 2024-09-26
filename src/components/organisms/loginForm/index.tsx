@@ -31,9 +31,8 @@ export function LoginForm() {
         <Input
           placeholder="E-mail"
           type="email"
-          name="email"
           autoComplete="email"
-          register={register}
+          {...register("email")}
         />
 
         {loginErrors?.email?.message && (
@@ -47,9 +46,8 @@ export function LoginForm() {
         <Input
           placeholder="Senha"
           type="password"
-          name="password"
           autoComplete="current-password"
-          register={register}
+          {...register("password")}
         />
 
         {loginErrors?.password?.message && (

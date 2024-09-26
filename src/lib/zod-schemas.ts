@@ -54,6 +54,7 @@ export const routineDataSchema = z.object({
   series: z.coerce.number(),
   period: z.string(),
   exerciseId: z.string().nullable(),
+  userId: z.string(),
 });
 
 export type RoutineData = z.infer<typeof routineDataSchema>;

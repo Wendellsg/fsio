@@ -1,10 +1,10 @@
 import {
-  Appointment,
+  type Appointment,
   AppointmentStatusEnum,
   ExerciseCategoryEnum,
-  Request,
+  type Request,
   RequestStatusEnum,
-  RoutineFrequencyTypeEnum,
+  type RoutineFrequencyTypeEnum,
   RoutinePeriodEnum,
   UserRoleEnum,
 } from "@prisma/client";
@@ -58,11 +58,11 @@ export const translateAppointmentStatus = (status: AppointmentStatusEnum) => {
 
 export const translateFrequencyType = (type: RoutineFrequencyTypeEnum) => {
   switch (type) {
-    case RoutineFrequencyTypeEnum.day:
+    case "day":
       return "Dia";
-    case RoutineFrequencyTypeEnum.week:
+    case "week":
       return "Semana";
-    case RoutineFrequencyTypeEnum.month:
+    case "month":
       return "Mês";
     default:
       return "";

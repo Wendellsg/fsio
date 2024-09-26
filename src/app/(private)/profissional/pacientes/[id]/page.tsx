@@ -1,5 +1,7 @@
 "use client";
 
+import { RoutineForm } from "@/components/forms/rotine-form";
+import RoutineCard from "@/components/molecules/routine-card";
 import {
   Accordion,
   AccordionContent,
@@ -8,14 +10,20 @@ import {
 } from "@/components/ui/accordion";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { removePatient, usePatient } from "@/hooks/usePatients";
+import { fisioFetcher } from "@/hooks/Apis";
+import {
+  type RoutineWithActivities,
+  removePatient,
+  usePatient,
+} from "@/hooks/usePatients";
 import { getFullAddress } from "@/lib/address";
 import { findAge } from "@/lib/date";
+import type { RoutineData } from "@/lib/zod-schemas";
 import { Cake, Mail, Phone, Pin, Ruler, Weight } from "lucide-react";
 import Link from "next/link";
-import { useState } from "react";
 import { BsPlus } from "react-icons/bs";
 import { RiEditBoxFill } from "react-icons/ri";
+import { toast } from "sonner";
 
 export default function PacientePage({
   params,
@@ -28,33 +36,8 @@ export default function PacientePage({
 
   const { patientData, refetch } = usePatient(id as string);
 
-  const [newRoutineModalOpen, setNewRoutineModalOpen] =
-    useState<boolean>(false);
-
   return (
     <>
-      {/* <Modals
-        isOpen={newRoutineModalOpen}
-        onClose={() => setNewRoutineModalOpen(false)}
-        title="Nova Rotina"
-      >
-        <RoutineForm
-          routine={{} as Routine}
-          onSubmit={async (NewRoutine: Prisma.RoutineCreateInput) => {
-            await fisioFetcher({
-              url: `/users/${id}/routines`,
-              method: "POST",
-              data: NewRoutine,
-              callback: () => {
-                setNewRoutineModalOpen(false);
-                toast.success("Rotina criada com sucesso");
-                refetch();
-              },
-            });
-          }}
-        />
-      </Modals> */}
-
       <div className="flex flex-col items-start justify-start w-full h-full gap-4 p-4">
         <div className="flex flex-col gap-4 w-full">
           <h2 className="text-lg bg-accent p-2 rounded-xl font-bold w-fit">
@@ -67,24 +50,41 @@ export default function PacientePage({
               <div className="flex items-center justify-between w-full p-4">
                 <p className="font-bold text-lg">Rotinas</p>
 
-                <Button
-                  variant="default"
-                  onClick={() => setNewRoutineModalOpen(!newRoutineModalOpen)}
-                >
-                  <BsPlus className="text-2xl font-bold" />
-                </Button>
+                <RoutineForm
+                  routine={
+                    {
+                      userId: id,
+                    } as RoutineWithActivities
+                  }
+                  onSubmit={async (NewRoutine: RoutineData) => {
+                    await fisioFetcher({
+                      url: "/routines",
+                      method: "POST",
+                      data: NewRoutine,
+                      callback: () => {
+                        toast.success("Rotina criada com sucesso");
+                        refetch();
+                      },
+                    });
+                  }}
+                  trigger={
+                    <Button variant="default">
+                      <BsPlus className="text-2xl font-bold" />
+                    </Button>
+                  }
+                />
               </div>
-              {/* <div className="flex items-center justify-start flex-wrap w-full gap-4 p-4">
-                {patientData?.routines?.map((routine: Routine) => {
+              <div className="flex items-center justify-start flex-wrap w-full gap-4 p-4">
+                {patientData?.routines?.map((routine) => {
                   return (
                     <RoutineCard
                       key={routine.id}
                       routine={routine}
-                      updateUser={refetch}
+                      updatePatient={refetch}
                     />
                   );
                 })}
-              </div> */}
+              </div>
             </div>
           </div>
           <div className="flex flex-col md:min-w-[300px] gap-4 justify-start items-center min-h-fit md:w-fit">

@@ -13,7 +13,7 @@ import { translateExerciseCategory } from "@/types";
 import { ExerciseCategoryEnum } from "@prisma/client";
 import { X } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
+import { type FormEvent, useState } from "react";
 
 export function ExercisesFilters({
   search,

@@ -1,4 +1,4 @@
-import type { Activity, Address, User } from "@prisma/client";
+import type { Address, Prisma, User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
@@ -9,6 +9,22 @@ export type GetPatientsResponseDTO = Array<{
   name: string;
   image: string;
   email: string;
+}>;
+export type RoutineWithActivities = Prisma.RoutineGetPayload<{
+  include: {
+    exercise: true;
+    professional: {
+      include: {
+        user: true;
+      };
+    };
+    activities: true;
+    user: {
+      select: {
+        id: true;
+      };
+    };
+  };
 }>;
 
 export type GetPatientResponseDTO = {
@@ -22,13 +38,7 @@ export type GetPatientResponseDTO = {
   height: number;
   professionals: Array<{ id: string }>;
   address: Address;
-  routines: Array<{
-    id: string;
-    professional: {
-      id: string;
-    };
-    activities: Activity[];
-  }>;
+  routines: RoutineWithActivities[];
 };
 
 export const searchPatient = async (email: string) => {
