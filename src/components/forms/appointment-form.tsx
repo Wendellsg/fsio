@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dialog";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { AppointmentStatusEnum, Prisma, User } from "@prisma/client";
+import { AppointmentStatusEnum, type Prisma, type User } from "@prisma/client";
 import { useMemo, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { v4 as uuidv4 } from "uuid";
@@ -25,7 +25,10 @@ import {
   useAppointments,
 } from "../../hooks/useAppointments";
 import { usePatients } from "../../hooks/usePatients";
-import { AppointmentGetPayload, translateAppointmentStatus } from "../../types";
+import {
+  type AppointmentGetPayload,
+  translateAppointmentStatus,
+} from "../../types";
 import { PacienteAvatar } from "../molecules/patient-avatar";
 import { Select } from "../molecules/select";
 import { Calendar } from "../ui/calendar";
@@ -87,14 +90,23 @@ export const AppointmentForm = ({
   const { professionalData } = useProfessionalData();
 
   const handleSubmit = () => {
+    if (
+      !selectedPatient?.id ||
+      !selectedDate ||
+      !startDateTime ||
+      !endDateTime
+    ) {
+      return;
+    }
+
     const appointmentData: Prisma.AppointmentUncheckedCreateInput = {
       ...appointment,
-      patientId: selectedPatient?.id!,
+      patientId: selectedPatient?.id,
       startDate: selectedDate,
       startDateTime,
       endDateTime,
       status: selectedStatus,
-      professionalId: professionalData?.id!,
+      professionalId: professionalData?.id,
       timeZone: new Date().getTimezoneOffset() / 60,
     };
 
@@ -125,12 +137,12 @@ export const AppointmentForm = ({
           {selectedPatient ? (
             <div className="flex  flex-col justify-start items-start gap-4 max-w-full">
               <p className="font-bold">Paciente</p>
-              <button onClick={() => setSelectedPatient(null)}>
+              <button onClick={() => setSelectedPatient(null)} type="button">
                 <PacienteAvatar
-                  image={selectedPatient.image!}
-                  name={selectedPatient.name!}
+                  image={selectedPatient.image || ""}
+                  name={selectedPatient.name || ""}
                   index={1}
-                  id={selectedPatient.id!}
+                  id={selectedPatient.id || ""}
                 />
               </button>
             </div>
@@ -148,15 +160,16 @@ export const AppointmentForm = ({
                   return (
                     <button
                       onClick={() => {
-                        setSelectedPatient(_patient), console.log(_patient);
+                        setSelectedPatient(_patient);
                       }}
                       key={_patient.id}
+                      type="button"
                     >
                       <PacienteAvatar
-                        image={_patient.image!}
-                        name={_patient.name!}
+                        image={_patient.image}
+                        name={_patient.name}
                         index={index}
-                        id={_patient.id!}
+                        id={_patient.id}
                       />
                     </button>
                   );
@@ -296,7 +309,7 @@ export const AppointmentForm = ({
             </div>
           )}
 
-          <div className="w-full flex justify-center gap-4 mt-8"></div>
+          <div className="w-full flex justify-center gap-4 mt-8" />
         </div>
         <DialogFooter>
           {appointment?.id && (

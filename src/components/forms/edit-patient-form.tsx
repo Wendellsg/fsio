@@ -10,9 +10,10 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { type GetPatientResponseDTO, updatePatient } from "@/hooks/usePatients";
+import { BRPhoneMask } from "@/lib/maskes";
 import { type PatientData, patientDataSchema } from "@/lib/zod-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { Button } from "../ui/button";
 import { Input, InputBox, InputError } from "../ui/input";
@@ -30,6 +31,8 @@ export function EditPatientForm({
   const {
     register,
     handleSubmit,
+    watch,
+    setValue,
     formState: { errors },
   } = useForm<PatientData>({
     resolver: zodResolver(patientDataSchema),
@@ -37,13 +40,20 @@ export function EditPatientForm({
       name: patient.name,
       email: patient.email,
       phone: patient.phone,
-      birthDate: patient.birthDate,
+      birthDate: new Date(patient.birthDate),
       height: patient.height,
       weight: patient.weight,
     },
   });
 
   const [saving, setSaving] = useState(false);
+
+  const currentPhone = watch("phone");
+  const currentBirthDate = watch("birthDate");
+
+  useEffect(() => {
+    setValue("phone", BRPhoneMask(currentPhone));
+  }, [currentPhone, setValue]);
 
   async function onSubmit(data: PatientData) {
     setSaving(true);
@@ -93,7 +103,7 @@ export function EditPatientForm({
             <InputBox>
               <Label htmlFor="phone">Telefone</Label>
               <Input
-                placeholder="Telefone"
+                placeholder="(12) 34567-8901"
                 type={"tel"}
                 className="w-full min-w-20"
                 id="phone"
@@ -108,13 +118,17 @@ export function EditPatientForm({
             <InputBox>
               <Label htmlFor="height">Data de nascimento</Label>
               <Input
-                placeholder="01/01/2000"
-                type={"date"}
-                className="w-full min-w-20"
+                style={{
+                  fontSize: "0.8rem",
+                }}
+                type="date"
                 id="birthDate"
-                {...register("birthDate")}
+                value={new Date(currentBirthDate).toISOString().split("T")[0]}
+                onChange={(e) =>
+                  setValue("birthDate", new Date(e.target.value))
+                }
+                className="w-full min-w-20 text-xs"
               />
-
               {errors.birthDate?.message && (
                 <InputError>{errors.birthDate?.message}</InputError>
               )}
