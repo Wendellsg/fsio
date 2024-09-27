@@ -83,3 +83,34 @@ export const signUpDataSchema = z.object({
 });
 
 export type SignUpData = z.infer<typeof signUpDataSchema>;
+
+export const patientDataSchema = z.object({
+  name: z
+    .string({
+      required_error: "Campo obrigatório",
+      coerce: true,
+    })
+    .min(4, "Nome deve ter no mínimo 4 caracteres")
+    .max(100, "Nome deve ter no máximo 100 caracteres"),
+
+  email: z
+    .string({
+      required_error: "Campo obrigatório",
+    })
+    .email("Formato de email inválido"),
+
+  birthDate: z.coerce.date(),
+  phone: z.string({
+    required_error: "Campo obrigatório",
+  }),
+  height: z.coerce.number({
+    coerce: true,
+    description: "Altura em centímetros",
+  }),
+  weight: z.coerce.number({
+    coerce: true,
+    description: "Peso em quilogramas",
+  }),
+});
+
+export type PatientData = z.infer<typeof patientDataSchema>;

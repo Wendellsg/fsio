@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 "use client";
 import { useExercises } from "@/hooks";
-import type { RoutineWithActivities } from "@/hooks/usePatients";
+import type { RoutineWithExercise } from "@/hooks/usePatients";
 import { resolvePath } from "@/lib/cdn";
 import { type RoutineData, routineDataSchema } from "@/lib/zod-schemas";
 import {
@@ -47,7 +47,7 @@ export const RoutineForm = ({
 }: {
   onSubmit: (routine: RoutineData) => void;
   trigger: React.ReactNode;
-  routine: RoutineWithActivities;
+  routine: RoutineWithExercise;
 }) => {
   const {
     register,

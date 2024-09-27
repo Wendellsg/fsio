@@ -1,5 +1,6 @@
 "use client";
 
+import { EditPatientForm } from "@/components/forms/edit-patient-form";
 import { RoutineForm } from "@/components/forms/rotine-form";
 import RoutineCard from "@/components/molecules/routine-card";
 import {
@@ -12,10 +13,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { fisioFetcher } from "@/hooks/Apis";
 import {
-  type RoutineWithActivities,
+  type RoutineWithExercise,
   removePatient,
   usePatient,
 } from "@/hooks/usePatients";
+import { usePatientRoutines } from "@/hooks/useRoutines";
 import { getFullAddress } from "@/lib/address";
 import { findAge } from "@/lib/date";
 import type { RoutineData } from "@/lib/zod-schemas";
@@ -34,7 +36,16 @@ export default function PacientePage({
 }) {
   const { id } = params;
 
-  const { patientData, refetch } = usePatient(id as string);
+  const {
+    patientData,
+    refetch: refetchPatient,
+    isLoading,
+  } = usePatient(id as string);
+  const { routines, refetch } = usePatientRoutines(id);
+
+  if (isLoading) return <p>Carregando...</p>;
+
+  if (!patientData) return <p>Paciente não encontrado</p>;
 
   return (
     <>
@@ -54,7 +65,7 @@ export default function PacientePage({
                   routine={
                     {
                       userId: id,
-                    } as RoutineWithActivities
+                    } as RoutineWithExercise
                   }
                   onSubmit={async (NewRoutine: RoutineData) => {
                     await fisioFetcher({
@@ -75,7 +86,7 @@ export default function PacientePage({
                 />
               </div>
               <div className="flex items-center justify-start flex-wrap w-full gap-4 p-4">
-                {patientData?.routines?.map((routine) => {
+                {routines?.map((routine) => {
                   return (
                     <RoutineCard
                       key={routine.id}
@@ -95,9 +106,16 @@ export default function PacientePage({
                 {patientData?.name?.split(" ")[1][0]}
               </AvatarFallback>
             </Avatar>
-            <Button type="button">
-              Editar Paciente <RiEditBoxFill size={20} />
-            </Button>
+
+            <EditPatientForm
+              patient={patientData}
+              trigger={
+                <Button type="button">
+                  Editar Paciente <RiEditBoxFill size={20} />
+                </Button>
+              }
+              onClose={refetchPatient}
+            />
 
             <p className="font-bold text-md">{patientData?.name}</p>
 
@@ -109,8 +127,9 @@ export default function PacientePage({
                     <div className="flex items-center">
                       <Cake size={25} />
                       <span className="ml-2 font-semibold">
-                        {findAge(patientData?.birthDate?.toDateString()) ??
-                          "Sem idade"}
+                        {findAge(
+                          new Date(patientData?.birthDate).toISOString()
+                        ) ?? "Sem idade"}
                       </span>
                     </div>
 
@@ -148,23 +167,6 @@ export default function PacientePage({
                         {getFullAddress(patientData?.address) ?? "Sem endereço"}
                       </span>
                     </div>
-
-                    {/* 
-                
-              
-                    <InfoItem
-                      icon={<FaEnvelope size={30} />}
-                      text={patientData?.email}
-                    />
-
-                    {patientData?.address && (
-                      <InfoItem
-                        icon={<RiMapPin2Fill size={30} />}
-                        iconSize="30px"
-                        text={`${patientData?.address}, ${patientData?.addressNumber}, ${patientData?.addressCity} - ${patientData?.addressState}`}
-                      />
-                    )}
-                  */}
                   </div>
                 </AccordionContent>
               </AccordionItem>

@@ -1,4 +1,4 @@
-import type { RoutineWithActivities } from "@/hooks/usePatients";
+import type { RoutineWithExercise } from "@/hooks/usePatients";
 import { useUserData } from "@/hooks/useUserData";
 import { resolvePath } from "@/lib/cdn";
 import { translateFrequencyType, translatePeriodType } from "@/types";
@@ -15,7 +15,7 @@ export default function RoutineCard({
   routine,
   updatePatient,
 }: {
-  routine: RoutineWithActivities;
+  routine: RoutineWithExercise;
   updatePatient: () => void;
 }) {
   const { userData } = useUserData();
@@ -24,7 +24,7 @@ export default function RoutineCard({
     <>
       <div
         className={
-          "relative overflow-hidden border rounded-xl shadow-sm flex p-4 flex-col flex-1 w-80 min-w-80 ma-w-[90vw] bg-cover h-96 bg-center bg-no-repeat"
+          "relative overflow-hidden border rounded-xl shadow-sm flex p-4 flex-col flex-1 w-80 min-w-80 max-w-[90vw] bg-cover h-96 bg-center bg-no-repeat"
         }
         style={{
           backgroundImage: `url("${resolvePath(

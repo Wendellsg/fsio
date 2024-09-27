@@ -1,3 +1,4 @@
+import type { PatientData } from "@/lib/zod-schemas";
 import type { Address, Prisma, User } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { useMemo, useState } from "react";
@@ -10,7 +11,7 @@ export type GetPatientsResponseDTO = Array<{
   image: string;
   email: string;
 }>;
-export type RoutineWithActivities = Prisma.RoutineGetPayload<{
+export type RoutineWithExercise = Prisma.RoutineGetPayload<{
   include: {
     exercise: true;
     professional: {
@@ -18,7 +19,6 @@ export type RoutineWithActivities = Prisma.RoutineGetPayload<{
         user: true;
       };
     };
-    activities: true;
     user: {
       select: {
         id: true;
@@ -38,7 +38,6 @@ export type GetPatientResponseDTO = {
   height: number;
   professionals: Array<{ id: string }>;
   address: Address;
-  routines: RoutineWithActivities[];
 };
 
 export const searchPatient = async (email: string) => {
@@ -99,14 +98,14 @@ const getPatients = async () => {
   });
 };
 
-export const updatePatient = async (
+export const updatePatientDiagnoses = async (
   patient: Partial<User>,
   diagnosis: string
 ) => {
   const response = await fisioFetcher({
-    url: `/patients/${patient.id}`,
+    url: `/patients/${patient.id}/diagnosis`,
     method: "PATCH",
-    data: { patient, diagnosis },
+    data: { diagnosis },
     callback: () => {
       toast.success("Paciente atualizado com sucesso");
     },
@@ -115,6 +114,17 @@ export const updatePatient = async (
   if (!response) return false;
   return response;
 };
+
+export function updatePatient(patientId: string, patient: PatientData) {
+  return fisioFetcher({
+    url: `/patients/${patientId}`,
+    method: "PATCH",
+    data: patient,
+    callback: () => {
+      toast.success("Paciente atualizado com sucesso");
+    },
+  });
+}
 
 export const usePatients = () => {
   const {
@@ -156,11 +166,15 @@ const getPatientData = async (patientId: string) => {
 };
 
 export function usePatient(id: string) {
-  const { data: patientData, refetch } = useQuery({
+  const {
+    data: patientData,
+    refetch,
+    isLoading,
+  } = useQuery({
     queryKey: ["patientData", id as string],
     queryFn: () => getPatientData(id as string),
     staleTime: 1000 * 60 * 10,
   });
 
-  return { patientData, refetch };
+  return { patientData, refetch, isLoading };
 }

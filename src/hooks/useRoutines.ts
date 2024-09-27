@@ -1,7 +1,8 @@
-import { Routine } from "@prisma/client";
+import type { Routine } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
 import { toast } from "sonner";
 import { fisioFetcher } from "./Apis";
+import type { RoutineWithExercise } from "./usePatients";
 
 export const useRoutines = () => {
   const getRoutines = async (userid: string) => {
@@ -47,7 +48,7 @@ export const useRoutines = () => {
   };
 };
 
-export const usePatientRoutines = () => {
+export const usePatientRoutines = (patientId: string) => {
   const {
     data: routines,
     isLoading,
@@ -58,8 +59,8 @@ export const usePatientRoutines = () => {
   });
 
   const getPatientRoutines = async () => {
-    return await fisioFetcher<Routine[]>({
-      url: `/users/routines`,
+    return await fisioFetcher<RoutineWithExercise[]>({
+      url: `/patients/${patientId}/routines`,
       method: "GET",
     });
   };
