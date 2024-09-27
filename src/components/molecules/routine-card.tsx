@@ -38,7 +38,7 @@ export default function RoutineCard({
           </h2>
 
           <div className="flex gap-4 ml-auto">
-            <Activities routine={routine} />
+            <Activities routineId={routine.id} />
 
             {userData?.id === routine.professional.id && (
               <>

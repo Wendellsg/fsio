@@ -4,34 +4,30 @@ import { Button } from "@/components/ui/button";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverTrigger } from "@/components/ui/popover";
 import { Slider } from "@/components/ui/slider";
-import { useActivities } from "@/hooks/useActivities";
+import { createActivity } from "@/hooks/useActivities";
 import { cn } from "@/lib/utils";
 import { queryClient } from "@/providers";
-import type { Routine } from "@prisma/client";
 import { PopoverContent } from "@radix-ui/react-popover";
 import { format } from "date-fns";
 import { CalendarIcon, Plus } from "lucide-react";
 import { useState } from "react";
 import { activitiesColors } from "../molecules/activities";
 
-export function ActivityForm({ routine }: { routine: Routine }) {
+export function ActivityForm({ routineId }: { routineId: string }) {
   const [show, setShow] = useState<boolean>(false);
   const [newActivity, setNewActivity] = useState({
     effortLevel: 1,
     painLevel: 1,
     comments: "",
     date: new Date(),
-    routineId: routine.id,
+    routineId: routineId,
   });
 
   const [creating, setCreating] = useState<boolean>(false);
 
-  const { createActivity } = useActivities();
-
   async function handleCreateActivity() {
     setCreating(true);
     await createActivity({
-      routine,
       ...newActivity,
     });
 
@@ -40,11 +36,11 @@ export function ActivityForm({ routine }: { routine: Routine }) {
       painLevel: 1,
       comments: "",
       date: new Date(),
-      routineId: routine.id,
+      routineId: routineId,
     });
 
     queryClient.invalidateQueries({
-      queryKey: ["patientData", routine.userId],
+      queryKey: ["activities", routineId],
     });
     setCreating(false);
 
