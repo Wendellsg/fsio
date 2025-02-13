@@ -20,11 +20,15 @@ const createLoginSchema = z.object({
       required_error: "Senha é obrigatória",
     })
     .min(6, "Senha deve ter no mínimo 6 caracteres"),
+  birthDate: z.coerce
+    .date({
+      required_error: "Data de nascimento é obrigatória",
+    })
+    .nullable(),
 });
-
 export type LoginData = z.infer<typeof createLoginSchema>;
 
-export const useAuth = () => {
+export const useAuth = (type: "patient" | "others") => {
   const router = useRouter();
 
   const [isLogging, setIsLogging] = useState<boolean>(false);
@@ -34,37 +38,64 @@ export const useAuth = () => {
     formState: { errors },
   } = useForm<LoginData>({
     resolver: zodResolver(createLoginSchema),
+    defaultValues: {
+      email: "",
+      password: type === "patient" ? "default" : "",
+      birthDate: null,
+    },
   });
 
   const login = async ({
     email,
     password,
+    birthDate,
   }: {
     email: string;
     password: string;
+    birthDate: Date | null;
   }) => {
     setIsLogging(true);
     try {
-      const { data } = await axios.post(
-        `${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`,
-        {
-          email,
-          password,
-        }
-      );
+      if (type === "patient") {
+        const { data } = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login/patient`,
+          {
+            email,
+            password,
+            birthDate,
+          }
+        );
 
-      window.localStorage.setItem(
-        process.env.NEXT_PUBLIC_TOKEN_KEY as string,
-        data.token
-      );
+        window.localStorage.setItem(
+          process.env.NEXT_PUBLIC_TOKEN_KEY as string,
+          data.token
+        );
+      } else {
+        const { data } = await axios.post(
+          `${process.env.NEXT_PUBLIC_API_ENDPOINT}/auth/login`,
+          {
+            email,
+            password,
+          }
+        );
+
+        window.localStorage.setItem(
+          process.env.NEXT_PUBLIC_TOKEN_KEY as string,
+          data.token
+        );
+      }
 
       toast.success("Login efetuado com sucesso");
 
       queryClient.invalidateQueries({
         queryKey: ["userData"],
       });
-    } catch (error: any) {
-      toast.error(error.response.data.message);
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
+        toast.error(error.response.data.message);
+      } else {
+        toast.error("An unknown error occurred");
+      }
     } finally {
       setIsLogging(false);
     }

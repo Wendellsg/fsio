@@ -124,9 +124,12 @@ export function EditPatientForm({
                 type="date"
                 id="birthDate"
                 value={new Date(currentBirthDate).toISOString().split("T")[0]}
-                onChange={(e) =>
-                  setValue("birthDate", new Date(e.target.value))
-                }
+                onChange={(e) => {
+                  const dateValue = new Date(e.target.value);
+                  if (!Number.isNaN(dateValue.getTime())) {
+                    setValue("birthDate", dateValue);
+                  }
+                }}
                 className="w-full min-w-20 text-xs"
               />
               {errors.birthDate?.message && (

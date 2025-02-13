@@ -9,14 +9,14 @@ import { useUserData } from "@/hooks/useUserData";
 import Link from "next/link";
 
 export function LoginForm() {
-  const { register, handleSubmit, loginErrors, isLogging } = useAuth();
+  const { register, handleSubmit, loginErrors, isLogging } = useAuth("others");
 
   const { userData, isLoading } = useUserData();
 
   if (isLoading) return <Loading size={50} />;
 
   if (userData?.id) {
-    return <AlreadyLoggedCard />;
+    return <AlreadyLoggedCard type="others" />;
   }
 
   return (
@@ -64,6 +64,16 @@ export function LoginForm() {
       </Button>
 
       <div className="flex flex-col items-center justify-center gap-1 border-t border-gray-300 pt-4">
+        <p className="text-xs">É um paciente?</p>
+
+        <Link
+          href="/login/paciente"
+          className="border-b border-gray-300 pb-2"
+          passHref
+        >
+          <p className="cursor-pointer font-bold">Login de pacientes</p>
+        </Link>
+
         <p className="text-xs">Não tem uma conta?</p>
 
         <Link href="/cadastro" passHref>
@@ -76,6 +86,65 @@ export function LoginForm() {
           <p className="cursor-pointer font-bold">Recuperar senha</p>
         </Link>
       </div>
+    </form>
+  );
+}
+
+export function PatientLoginForm() {
+  const { register, handleSubmit, loginErrors, isLogging } = useAuth("patient");
+
+  const { userData, isLoading } = useUserData();
+
+  if (isLoading) return <Loading size={50} />;
+
+  if (userData?.id) {
+    return <AlreadyLoggedCard type="patient" />;
+  }
+
+  return (
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col items-center justify-center gap-4 rounded-xl bg-white p-8 shadow-10px md:min-w-80"
+    >
+      <p className="font-bold">Faça login</p>
+      <InputBox>
+        <Label htmlFor="email">E-mail</Label>
+
+        <Input
+          placeholder="E-mail"
+          type="email"
+          autoComplete="email"
+          {...register("email")}
+        />
+
+        {loginErrors?.email?.message && (
+          <InputError>{loginErrors?.email?.message}</InputError>
+        )}
+      </InputBox>
+
+      <InputBox>
+        <Label htmlFor="birthDate">Data de nascimento</Label>
+
+        <Input
+          className="w-full"
+          placeholder="Senha"
+          type="date"
+          id="birthDate"
+          {...register("birthDate")}
+        />
+
+        {loginErrors?.birthDate?.message && (
+          <InputError>{loginErrors?.birthDate?.message}</InputError>
+        )}
+      </InputBox>
+
+      <Button
+        type="submit"
+        className="w-full text-black font-bold"
+        disabled={isLogging}
+      >
+        {isLogging ? <Loading className="text-white" size={15} /> : "Entrar"}
+      </Button>
     </form>
   );
 }

@@ -7,7 +7,7 @@ export default function ProfileLayout({
 }) {
   return (
     <AppContainer>
-      <PageContent>{children}</PageContent>;
+      <PageContent>{children}</PageContent>
     </AppContainer>
   );
 }

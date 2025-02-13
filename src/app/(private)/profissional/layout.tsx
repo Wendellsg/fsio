@@ -1,6 +1,8 @@
 import NavMenu, { type MenuItem } from "@/components/organisms/navigation";
 import { AppContainer, PageContent } from "@/components/ui/layouts";
+import { RouteGuardProvider } from "@/providers";
 import { ProfessionalProvider } from "@/providers/professional-provider";
+import { UserRoleEnum } from "@prisma/client";
 import {
   FaCalendarCheck,
   FaDumbbell,
@@ -38,11 +40,13 @@ export default function ProfessionalLayout({
   ];
 
   return (
-    <AppContainer>
-      <ProfessionalProvider>
-        <NavMenu menuItems={menuItems} />
-        <PageContent>{children}</PageContent>
-      </ProfessionalProvider>
-    </AppContainer>
+    <RouteGuardProvider role={UserRoleEnum.professional} redirect="/login">
+      <AppContainer>
+        <ProfessionalProvider>
+          <NavMenu menuItems={menuItems} />
+          <PageContent>{children}</PageContent>
+        </ProfessionalProvider>
+      </AppContainer>
+    </RouteGuardProvider>
   );
 }

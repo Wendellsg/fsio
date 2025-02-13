@@ -16,7 +16,7 @@ const pathByRole = {
   [UserRoleEnum.professional]: "/profissional",
 };
 
-export const AlreadyLoggedCard = () => {
+export const AlreadyLoggedCard = ({ type }: { type: "patient" | "others" }) => {
   const { userData } = useUserData();
 
   function resendVerificationEmail() {
@@ -32,19 +32,19 @@ export const AlreadyLoggedCard = () => {
     });
   }
 
-  const { logout } = useAuth();
+  const { logout } = useAuth(type);
   return (
-    <div className="flex flex-col items-center justify-center gap-4 rounded-xl bg-white p-8 shadow-10px">
+    <div className="flex flex-col items-center justify-center gap-4 rounded-xl bg-white p-8 shadow-10px w-96">
       <ProfileImage className="w-40 h-40" />
       <p className="mt-4">Você está logado(a) como</p>
       <p className="text-lg font-bold">{userData?.name}</p>
 
       <div className="flex flex-col my-8 justify-center items-center">
-        {userData?.accountVerifiedAt ? (
+        {userData?.accountVerifiedAt || type === "patient" ? (
           <>
             <p className="text-xs w-full text-center mb-4">Continuar como</p>
             {userData?.roles?.map((role: UserRoleEnum) => (
-              <Button className="w-36 mb-2" type="submit" key={role}>
+              <Button className="w-36  mb-2" type="submit" key={role}>
                 <Link
                   href={pathByRole[role] || "/"}
                   passHref

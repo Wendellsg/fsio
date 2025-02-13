@@ -31,9 +31,11 @@ export const NewPatientModal: React.FC<{
   const [newPatient, setNewPatient] = useState<{
     name: string;
     email: string;
+    birthDate: Date;
   }>({
     name: "",
     email: email,
+    birthDate: new Date(),
   });
 
   const [errors, setErrors] = useState<{
@@ -83,6 +85,27 @@ export const NewPatientModal: React.FC<{
                 placeholder="Digite o e-mail do paciente"
               />
               <InputError>{errors.email}</InputError>
+            </InputBox>
+
+            <InputBox>
+              <Label htmlFor="birthDate">Data de nascimento</Label>
+              <Input
+                onChange={(e) => {
+                  const dateValue = new Date(e.target.value);
+                  if (!Number.isNaN(dateValue.getTime())) {
+                    setNewPatient({
+                      ...newPatient,
+                      birthDate: dateValue,
+                    });
+                  }
+                }}
+                value={newPatient.birthDate.toISOString().split("T")[0]}
+                type="date"
+                name="birthDate"
+                id="birthDate"
+                placeholder="Digite o e-mail do paciente"
+              />
+              <InputError>{errors.birthDate}</InputError>
             </InputBox>
           </div>
         ) : (

@@ -67,6 +67,7 @@ export const addPatient = async (patientId: string) => {
 export const createPatient = async (patient: {
   name: string;
   email: string;
+  birthDate: Date;
 }) => {
   return await fisioFetcher({
     url: "/patients",
