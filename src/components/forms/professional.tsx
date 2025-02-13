@@ -133,6 +133,7 @@ export function ProfessionalForm({ className }: { className?: string }) {
                 Registro Profissional
               </Label>
               <Input
+                autoComplete="document"
                 id="license"
                 value={
                   editingProfessional?.license === "DEFAULT" ||
@@ -197,7 +198,7 @@ export function ProfessionalForm({ className }: { className?: string }) {
             </div>
             <div className="w-full">
               <Label htmlFor="email" className="text-right">
-                Email
+                Email(Profissional)
               </Label>
               <Input
                 id="email"
@@ -240,7 +241,7 @@ export function ProfessionalForm({ className }: { className?: string }) {
           </div>
         </div>
 
-        <div className="mx-auto md:mx-0">
+        <div className="mx-auto md:mx-0 md:ml-8">
           <ProfileImage className="w-40 h-40" editable />
         </div>
       </div>

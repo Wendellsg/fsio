@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Input, InputBox, InputError } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Loading } from "@/components/ui/loading";
-import { Switch } from "@/components/ui/switch";
 import { type SignUpData, signUpDataSchema } from "@/lib/zod-schemas";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
@@ -17,8 +16,6 @@ export function SignUpForm() {
   const {
     register,
     handleSubmit,
-    watch,
-    setValue,
     formState: { errors },
   } = useForm<SignUpData>({
     resolver: zodResolver(signUpDataSchema),
@@ -31,12 +28,8 @@ export function SignUpForm() {
   const [isSigningUp, setIsSigningUp] = useState(false);
   const [signUpError, setSignUpError] = useState("");
 
-  console.log(errors);
-
   const handleSignUp = async (signUpData: SignUpData) => {
     setIsSigningUp(true);
-
-    console.log(signUpData);
 
     if (signUpData.password !== signUpData.passwordConfirmation) {
       setSignUpError("As senhas não coincidem");
@@ -49,12 +42,12 @@ export function SignUpForm() {
         name: signUpData.name,
         email: signUpData.email,
         password: signUpData.password,
-        isProfessional: signUpData.isProfessional,
+        isProfessional: true,
       });
       toast.success("Cadastro realizado com sucesso!");
       router.push("/login");
-    } catch (error: any) {
-      if (error.response) {
+    } catch (error: unknown) {
+      if (axios.isAxiosError(error) && error.response) {
         setSignUpError(error.response.data.message);
       } else {
         setSignUpError("Erro ao se conectar com o servidor");
@@ -127,23 +120,6 @@ export function SignUpForm() {
 
         {errors?.passwordConfirmation?.message && (
           <InputError>{errors?.passwordConfirmation?.message}</InputError>
-        )}
-      </InputBox>
-
-      <InputBox>
-        <Label htmlFor="isProfessional">Você é profissional da saúde?</Label>
-
-        <Switch
-          name="isProfessional"
-          checked={watch("isProfessional")}
-          id="isProfessional"
-          onCheckedChange={(value) => {
-            setValue("isProfessional", value as boolean);
-          }}
-        />
-
-        {errors?.isProfessional?.message && (
-          <InputError>{errors?.isProfessional?.message}</InputError>
         )}
       </InputBox>
 
